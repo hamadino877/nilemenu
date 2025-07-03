@@ -1,0 +1,2680 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة مطعم نايل جورميه</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Cairo for Arabic, Inter for English -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', 'Inter', sans-serif;
+            background-color: #1a1a1a; /* Dark background */
+            color: #e0e0e0; /* Light text for contrast */
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure full viewport height for sticky footer */
+        }
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .header-bg {
+            background-image: url('https://i.imgur.com/sCbnK23.jpeg'); /* New background image */
+            background-size: cover;
+            background-position: center;
+            padding-top: 3.5rem;
+            padding-bottom: 3.5rem;
+            border-bottom-left-radius: 4rem;
+            border-bottom-right-radius: 4rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden; /* Ensure content stays within rounded corners */
+        }
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for text readability */
+            z-index: 1;
+        }
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #f0f0f0;
+        }
+        .logo-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 8px solid #d2b48c; /* Beige border */
+            box-shadow: 0 0 20px rgba(210, 180, 140, 0.3); /* Subtle beige glow */
+            margin-bottom: 2rem;
+            display: inline-block; /* To center it properly */
+        }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .restaurant-name {
+            font-size: 4.5rem;
+            font-weight: 800; /* Extra bold */
+            letter-spacing: 0.05em;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            color: #ffffff; /* Changed to white */
+        }
+        .restaurant-tagline {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            color: #f0f0f0;
+            margin-top: 0.5rem;
+        }
+        .contact-info-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            color: #f0f0f0;
+            font-size: 1rem;
+        }
+        .contact-info-header p, .contact-info-header a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        .contact-info-header a:hover {
+            color: #d2b48c; /* Beige on hover */
+        }
+        .contact-info-header svg {
+            width: 20px;
+            height: 20px;
+            color: #a0522d; /* Sienna for icons */
+        }
+
+        .menu-book-container {
+            flex-grow: 1; /* Allows it to take available space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            align-items: center;
+            padding: 2rem 0;
+        }
+
+        .category-page {
+            background-color: #2c2c2c; /* Dark grey for category pages */
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 900px; /* Max width for the "page" */
+            margin-bottom: 2.5rem;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-out; /* Fade in animation */
+        }
+        .category-page.active {
+            display: block; /* Show active page */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-category-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem; /* Larger category titles */
+            font-weight: 700;
+            color: #d2b48c; /* Beige for category titles */
+            text-align: center;
+            margin-top: 0; /* Reset margin-top for pages */
+        }
+        .menu-category-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 100px;
+            height: 4px;
+            background-color: #a0522d; /* Sienna color */
+            border-radius: 9999px;
+        }
+        .category-notes { /* New class for category notes within the page */
+            text-align: center;
+            color: #b0b0b0; /* Lighter grey for notes */
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .menu-items-grid { /* New class for grid within category page */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+            gap: 1.5rem;
+        }
+
+        .menu-item-card {
+            background-color: #3a3a3a; /* Slightly lighter dark grey for item cards */
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .menu-item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Align name to top, price to top */
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        .item-content {
+            flex-grow: 1; /* Allow content to take available space */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-inline-end: 1rem; /* Margin on the right side in RTL to prevent overlap */
+        }
+        .item-name-arabic {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #f0f0f0; /* Off-white for Arabic name */
+        }
+        .item-name-english {
+            font-size: 1rem;
+            color: #b0b0b0; /* Lighter grey for English name */
+            margin-top: 0.25rem;
+        }
+        .item-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff; /* Changed to white */
+            white-space: nowrap;
+            /* Removed absolute positioning */
+        }
+        .grill-prices { /* Style for multiple grill prices */
+            font-size: 0.9rem;
+            color: #ffffff; /* Changed to white */
+            line-height: 1.4;
+            text-align: start; /* Align to start in RTL for prices */
+            display: flex;
+            flex-direction: column; /* Stack price labels */
+            align-items: flex-end; /* Align price labels to the end (left in RTL) */
+            /* Removed absolute positioning */
+        }
+        .grill-prices span {
+            font-weight: 600;
+            color: #ffffff; /* Changed to white */
+        }
+        .grill-prices .price-label {
+            font-size: 0.8rem;
+            color: #d0d0d0; /* Slightly lighter white for labels */
+            font-weight: 400;
+        }
+
+
+        .action-buttons-container {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            align-self: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .description-button, .pairing-button, .nutritional-button {
+            color: white;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: none;
+        }
+        .description-button {
+            background-color: #5A009B; /* Darker purple */
+        }
+        .description-button:hover:not(:disabled) {
+            background-color: #4A007F;
+            transform: translateY(-2px);
+        }
+        .pairing-button {
+            background-color: #D46900; /* Dark amber */
+        }
+        .pairing-button:hover:not(:disabled) {
+            background-color: #A05000;
+            transform: translateY(-2px);
+        }
+        .nutritional-button {
+            background-color: #3A5F0B; /* Dark forest green */
+        }
+        .nutritional-button:hover:not(:disabled) {
+            background-color: #2A4508;
+            transform: translateY(-2px);
+        }
+        .description-button:disabled, .pairing-button:disabled, .nutritional-button:disabled {
+            background-color: #4a4a4a;
+            cursor: not-allowed;
+            box-shadow: none;
+            color: #999;
+        }
+
+        .llm-info-content {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #c0c0c0; /* Lighter grey for LLM text */
+            font-style: italic;
+            border-top: 1px dashed #444;
+            padding-top: 0.75rem;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .llm-info-content.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top: 3px solid #d2b48c; /* Beige spinner */
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-inline-end: 0.4rem;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Global Suggest Dish Section */
+        .global-suggest-section {
+            background-color: #2c2c2c;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            padding: 2.5rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .global-suggest-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d2b48c;
+            margin-bottom: 1.5rem;
+        }
+        .global-suggest-button {
+            background-color: #a0522d; /* Sienna button */
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(160, 82, 45, 0.4);
+            border: none;
+        }
+        .global-suggest-button:hover:not(:disabled) {
+            background-color: #8b4513; /* Darker sienna */
+            transform: translateY(-3px);
+        }
+        .global-suggest-button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .global-suggestion-output {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            color: #f0f0f0;
+            font-style: italic;
+            border-top: 1px dashed #444;
+            padding-top: 1rem;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .global-suggestion-output.active {
+            display: block;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .nav-button {
+            background-color: #a0522d; /* Sienna button */
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(160, 82, 45, 0.4);
+            border: none;
+        }
+        .nav-button:hover:not(:disabled) {
+            background-color: #8b4513; /* Darker sienna */
+            transform: translateY(-3px);
+        }
+        .nav-button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Back to Top Button */
+        #backToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed position */
+            bottom: 20px; /* Place at the bottom */
+            right: 30px; /* Place at the right */
+            z-index: 99; /* Make sure it does not overlap */
+            border: none; /* Remove borders */
+            outline: none; /* Remove outline */
+            background-color: #d2b48c; /* Beige background */
+            color: white; /* White text */
+            cursor: pointer; /* Add a mouse pointer on hover */
+            padding: 15px; /* Some padding */
+            border-radius: 10px; /* Rounded corners */
+            font-size: 18px; /* Increase font size */
+            box-shadow: 0 4px 15px rgba(210, 180, 140, 0.4);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #backToTopBtn:hover {
+            background-color: #a0522d; /* Darker beige on hover */
+            transform: translateY(-3px);
+        }
+
+        /* Language Toggle Button */
+        #langToggleBtn {
+            background-color: #a0522d;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: none;
+            margin-top: 1rem;
+        }
+        #langToggleBtn:hover {
+            background-color: #8b4513;
+            transform: translateY(-2px);
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            background-color: #2c2c2c;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            padding: 2.5rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .feedback-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d2b48c;
+            margin-bottom: 1.5rem;
+        }
+        .feedback-button {
+            background-color: #007bff; /* Blue button */
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+            border: none;
+        }
+        .feedback-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+        }
+        .feedback-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .feedback-modal-content {
+            background-color: #3a3a3a;
+            margin: auto;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: left; /* Changed to left for RTL */
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #d2b48c;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .star-rating {
+            direction: ltr; /* Force LTR for star rating */
+            display: inline-block;
+            unicode-bidi: bidi-override;
+            margin-bottom: 1rem;
+        }
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            font-size: 2.5rem;
+            color: #444;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #d2b48c; /* Beige stars */
+        }
+        .feedback-modal-content textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #555;
+            background-color: #4a4a4a;
+            color: #e0e0e0;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .feedback-submit-btn {
+            background-color: #a0522d;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+        .feedback-submit-btn:hover {
+            background-color: #8b4513;
+        }
+        .feedback-list {
+            margin-top: 2rem;
+            text-align: right; /* Align text to right for RTL */
+        }
+        .feedback-item {
+            background-color: #3a3a3a;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .feedback-item .rating {
+            color: #d2b48c;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .feedback-item .comment {
+            font-size: 0.95rem;
+            color: #c0c0c0;
+        }
+        .feedback-item .timestamp {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.5rem;
+            text-align: left; /* Align timestamp to left for RTL */
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c2c2c; /* Dark grey for footer */
+            color: #b0b0b0;
+            border-radius: 1rem;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .restaurant-name {
+                font-size: 3rem;
+            }
+            .restaurant-tagline {
+                font-size: 1.2rem;
+            }
+            .menu-category-title {
+                font-size: 2rem;
+            }
+            .item-price, .grill-prices {
+                position: static; /* Reset position for small screens */
+                margin-top: 0.5rem;
+                align-self: flex-end;
+                text-align: start; /* Align to start in RTL for smaller screens */
+            }
+            .action-buttons-container {
+                align-self: flex-start;
+            }
+            .global-suggest-button, .nav-button, .feedback-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+            #backToTopBtn {
+                padding: 10px;
+                font-size: 16px;
+                bottom: 15px;
+                right: 15px;
+            }
+            .feedback-modal-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+    <!-- Moved restaurantData to a global script tag -->
+    <script>
+        const restaurantData = {
+            "ar": {
+                "restaurant_name": "النيل غورميه",
+                "tagline": "أصالة المذاق المصري",
+                "contact_info": {
+                    "phone": "0584099255",
+                    "email": "gourmetnile@gmail.com",
+                    "website": "https://g.co/kgs/rL7jf96",
+                    "address": "البرشا جنوب 3 أرجان, بناية روز بالاس - محل رقم 15",
+                    "social_media": {
+                        "whatsapp": "971584099255",
+                        "instagram": "https://www.instagram.com/nilegourmet.ae/",
+                        "facebook": "https://www.facebook.com/alnilegourmet/"
+                    }
+                },
+                "menu": {
+                    "soups": {
+                        "category_arabic": "الشوربة",
+                        "category_english": "Soups",
+                        "items": [
+                            { "arabic_name": "شوربة عدس", "english_name": "Lentil Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة لسان عصفور", "english_name": "Orzo Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة كوارع", "english_name": "Trotters Soup", "price_aed": 25 }
+                        ]
+                    },
+                    "salads": {
+                        "category_arabic": "السلطات",
+                        "category_english": "Salads",
+                        "items": [
+                            { "arabic_name": "سلطة بلدي", "english_name": "Green Baladi Salad", "price_aed": 15 },
+                            { "arabic_name": "حمص", "english_name": "Hummus", "price_aed": 20 },
+                            { "arabic_name": "بابا غنوج", "english_name": "Baba Ghanoug", "price_aed": 20 },
+                            { "arabic_name": "طحينة", "english_name": "Tahini", "price_aed": 18 },
+                            { "arabic_name": "تومية", "english_name": "(Garlic Dip - Tomeya)", "price_aed": 18 }
+                        ]
+                    },
+                    "hot_appetizers": {
+                        "category_arabic": "مقبلات ساخنة",
+                        "category_english": "Hot Appetizers",
+                        "items": [
+                            { "arabic_name": "سجق إسكندراني", "english_name": "Alexandrian Sausage", "price_aed": 31.99 },
+                            { "arabic_name": "كبدة إسكندراني", "english_name": "Alexandrian Beef Liver", "price_aed": 31.99 },
+                            { "arabic_name": "فراخ محمرة 1", "english_name": "1½ FRIED CHICKEN", "price_aed": 15 },
+                            { "arabic_name": "بطاطس مقلية", "english_name": "French Fries", "price_aed": 15 }
+                        ]
+                    },
+                    "mahashi": {
+                        "category_arabic": "المحاشي",
+                        "category_english": "Mahashi (Stuffed Vegetables)",
+                        "items": [
+                            { "arabic_name": "ممبار", "english_name": "Mombar", "price_aed": 40 },
+                            { "arabic_name": "ورق عنب", "english_name": "Stuffed Vine Leaves", "price_aed": 30 },
+                            { "arabic_name": "محشي كرنب", "english_name": "Stuffed Cabbage", "price_aed": 30 },
+                            { "arabic_name": "محاشي مشكلة", "english_name": "Mixed Stuffed Vegetables", "price_aed": 40 },
+                            { "arabic_name": "محاشي مشكلة 1 كيلو", "english_name": "Mixed Stuffed Vegetables 1 kilo", "price_aed": 70 }
+                        ]
+                    },
+                    "nile_specialties_dishes": {
+                        "category_arabic": "أطباق النيل المميزة",
+                        "category_english": "Nile Specialties Dishes",
+                        "items": [
+                            { "arabic_name": "مكرونة بشاميل", "english_name": "Macaroni Bechamel", "price_aed": 35 },
+                            { "arabic_name": "معكرونة بالسجق الشرقي", "english_name": "Oriental Sausage Pasta", "price_aed": 35 },
+                            { "arabic_name": "رقاق باللحم المفروم", "english_name": "Roqaq with Minced Meat", "price_aed": 30 },
+                            { "arabic_name": "إسكالوب دجاج", "english_name": "Chicken Escalope", "price_aed": 35 },
+                            { "arabic_name": "فتة بمكعبات لحم بقري", "english_name": "Fatteh With Beef Meat Cubes", "price_aed": 55 },
+                            { "arabic_name": "فتة موزة ضاني", "english_name": "Lamb Shank Fattah", "price_aed": 60 },
+                            { "arabic_name": "فتة مع كوارع", "price_aed": 55 },
+                            { "arabic_name": "دجاجة كاملة محشوة بالأرز", "price_aed": 50 },
+                            { "arabic_name": "حمام محشو بالأرز", "price_aed": "55/105" },
+                            { "arabic_name": "حمام محشو بالفريك", "price_aed": "55/110" },
+                            { "arabic_name": "نصف بطة مع محاشي", "price_aed": 110 },
+                            { "english_name": "نصف بطة مشوية بالفرن", "price_aed": 100 },
+                            { "arabic_name": "كتف ضائي بالفرن", "price_aed": 200 }
+                        ]
+                    },
+                    "grills_al_nile": {
+                        "category_arabic": "مشاوي النيل",
+                        "category_english": "Grills Al-Nile",
+                        "notes": "Prices per portion / per kilo",
+                        "items": [
+                            { "arabic_name": "كباب", "english_name": "Lamb Kabab", "price_aed": "59 / 175" },
+                            { "arabic_name": "كفتة", "english_name": "Kofta", "price_aed": "55 / 160" },
+                            { "arabic_name": "ريش ضاني مشوية", "price_aed": "60 / 185" },
+                            { "arabic_name": "طرب", "english_name": "Tarb", "price_aed": "55 / 165" },
+                            { "arabic_name": "شيش طاووق", "price_aed": "50 / 125" },
+                            { "arabic_name": "مشاوي مشكلة النيل جورميه", "price_aed": "59 / 175" },
+                            { "arabic_name": "مشاوي مشكلة لحوم", "price_aed": "60 / 180" },
+                            { "arabic_name": "كبدة مشوية", "price_aed": 40 },
+                            { "arabic_name": "سجق مشوي", "price_aed": 45 },
+                            { "arabic_name": "حواوشي", "price_aed": 22 },
+                            { "arabic_name": "صدور دجاج مشوية", "price_aed": 40 },
+                            { "arabic_name": "موزة مشوية", "price_aed": 60 },
+                            { "arabic_name": "نصف فرخة مشوية", "price_aed": 35 }
+                        ]
+                    },
+                    "vegetables_and_tagens": {
+                        "category_arabic": "طواجن و خضار",
+                        "category_english": "Vegetables and Tagens",
+                        "items": [
+                            { "arabic_name": "ملوخية سادة", "price_aed": 38 },
+                            { "arabic_name": "ملوخية مع دجاج مقلي", "price_aed": 49 },
+                            { "arabic_name": "ملوخية مع مكعبات لحم مقلية", "price_aed": 54 },
+                            { "arabic_name": "طاجن مسقعة باللحم المفروم", "price_aed": 40 },
+                            { "arabic_name": "طاجن مسقعة بالبشاميل", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بطاطس بالدجاج", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس باللحم", "price_aed": 45 },
+                            { "arabic_name": "ورقة لحمة", "price_aed": 50 },
+                            { "arabic_name": "طاجن بامية سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بامية باللحم", "price_aed": 45 },
+                            { "arabic_name": "طاجن لحم بالبصل", "price_aed": 45 },
+                            { "arabic_name": "عكاوي بالبصل", "price_aed": 46 },
+                            { "arabic_name": "أرز معمر سادة", "price_aed": 30 },
+                            { "arabic_name": "أرز معمر باللحم", "price_aed": 50 },
+                            { "arabic_name": "رز معمر بالحمام", "price_aed": 70 },
+                            { "arabic_name": "ورق عنب بالكوارع", "price_aed": 50 },
+                            { "arabic_name": "طاجن موزة بالبطاطس", "price_aed": 65 }
+                        ]
+                    },
+                    "the_egyptian_feteer": {
+                        "category_arabic": "الفطير المصري",
+                        "category_english": "The Egyptian Feteer",
+                        "items": [
+                            { "arabic_name": "فطيرة مشلتت سادة", "price_aed": 69 },
+                            { "arabic_name": "فطيرة مكس جبن", "price_aed": 49 },
+                            { "arabic_name": "فطيرة مكس لحوم", "price_aed": 59 },
+                            { "arabic_name": "فطيرة خضار مشكلة", "price_aed": 49 },
+                            { "arabic_name": "فطيرة حلو النيل", "price_aed": 55 }
+                        ]
+                    },
+                    "side_dish": {
+                        "category_arabic": "أطباق جانبية",
+                        "category_english": "Side Dish",
+                        "items": [
+                            { "arabic_name": "أرز بالشعيرية", "price_aed": 15 },
+                            { "arabic_name": "أرز ابيض", "price_aed": 15 },
+                            { "arabic_name": "رز بالخلطة", "price_aed": 18 }
+                        ]
+                    },
+                    "feasts": {
+                        "arabic_name": "ولائم",
+                        "english_name": "Feasts",
+                        "items": [
+                            { "arabic_name": "وليمة فخدة ضاني", "price_aed": 350 },
+                            { "arabic_name": "وليمة مشاوي الملوك", "price_aed": 500 },
+                            { "arabic_name": "صينية محاشي مشكلة مع بطة", "price_aed": 280 },
+                            { "arabic_name": "صينية فتة مع 6 موزات", "price_aed": 360 },
+                            { "arabic_name": "وليمة مكس حمام", "price_aed": 500 },
+                            { "arabic_name": "وليمة خروف مع محاشي", "price_aed": 1400 },
+                            { "arabic_name": "وليمة خروف مع ارز باللخلطة", "price_aed": 1300 },
+                            { "arabic_name": "بطة كاملة مع محاشي", "price_aed": 260 },
+                            { "english_name": "ديك رومي في الفرن", "price_aed": 360 },
+                            { "arabic_name": "صنية رقاق", "price_aed": 120 },
+                            { "arabic_name": "صنية باشميل", "price_aed": 150 },
+                            { "arabic_name": "صنية ارز معمر مع لحمة", "price_aed": 160 }
+                        ]
+                    }
+                }
+            },
+            "en": {
+                "restaurant_name": "Nile Gourmet",
+                "tagline": "Authentic Egyptian Taste",
+                "contact_info": {
+                    "phone": "0584099255",
+                    "email": "gourmetnile@gmail.com",
+                    "website": "https://g.co/kgs/rL7jf96",
+                    "address": "Al Barsha South 3 Arjan, Rose Palace Building - Shop No. 15",
+                    "social_media": {
+                        "whatsapp": "971584099255",
+                        "instagram": "https://www.instagram.com/nilegourmet.ae/",
+                        "facebook": "https://www.facebook.com/alnilegourmet/"
+                    }
+                },
+                "menu": {
+                    "soups": {
+                        "category_arabic": "الشوربة",
+                        "category_english": "Soups",
+                        "items": [
+                            { "arabic_name": "شوربة عدس", "english_name": "Lentil Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة لسان عصفور", "english_name": "Orzo Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة كوارع", "english_name": "Trotters Soup", "price_aed": 25 }
+                        ]
+                    },
+                    "salads": {
+                        "category_arabic": "السلطات",
+                        "category_english": "Salads",
+                        "items": [
+                            { "arabic_name": "سلطة بلدي", "english_name": "Green Baladi Salad", "price_aed": 15 },
+                            { "arabic_name": "حمص", "english_name": "Hummus", "price_aed": 20 },
+                            { "arabic_name": "بابا غنوج", "english_name": "Baba Ghanoug", "price_aed": 20 },
+                            { "english_name": "(Garlic Dip - Tomeya)", "price_aed": 18 }
+                        ]
+                    },
+                    "hot_appetizers": {
+                        "category_arabic": "مقبلات ساخنة",
+                        "category_english": "Hot Appetizers",
+                        "items": [
+                            { "arabic_name": "سجق إسكندراني", "english_name": "Alexandrian Sausage", "price_aed": 31.99 },
+                            { "arabic_name": "كبدة إسكندراني", "english_name": "Alexandrian Beef Liver", "price_aed": 31.99 },
+                            { "arabic_name": "فراخ محمرة 1", "english_name": "1½ FRIED CHICKEN", "price_aed": 15 },
+                            { "arabic_name": "بطاطس مقلية", "price_aed": 15 }
+                        ]
+                    },
+                    "mahashi": {
+                        "category_arabic": "المحاشي",
+                        "category_english": "Mahashi (Stuffed Vegetables)",
+                        "items": [
+                            { "arabic_name": "ممبار", "english_name": "Mombar", "price_aed": 40 },
+                            { "arabic_name": "ورق عنب", "english_name": "Stuffed Vine Leaves", "price_aed": 30 },
+                            { "arabic_name": "محشي كرنب", "english_name": "Stuffed Cabbage", "price_aed": 30 },
+                            { "arabic_name": "محاشي مشكلة", "price_aed": 40 },
+                            { "arabic_name": "محاشي مشكلة 1 كيلو", "price_aed": 70 }
+                        ]
+                    },
+                    "nile_specialties_dishes": {
+                        "category_arabic": "أطباق النيل المميزة",
+                        "category_english": "Nile Specialties Dishes",
+                        "items": [
+                            { "arabic_name": "مكرونة بشاميل", "english_name": "Macaroni Bechamel", "price_aed": 35 },
+                            { "arabic_name": "معكرونة بالسجق الشرقي", "price_aed": 35 },
+                            { "arabic_name": "رقاق باللحم المفروم", "price_aed": 30 },
+                            { "arabic_name": "إسكالوب دجاج", "price_aed": 35 },
+                            { "arabic_name": "فتة بمكعبات لحم بقري", "price_aed": 55 },
+                            { "arabic_name": "فتة موزة ضاني", "price_aed": 60 },
+                            { "arabic_name": "فتة مع كوارع", "price_aed": 55 },
+                            { "arabic_name": "دجاجة كاملة محشوة بالأرز", "price_aed": 50 },
+                            { "arabic_name": "حمام محشو بالأرز", "price_aed": "55/105" },
+                            { "arabic_name": "حمام محشو بالفريك", "price_aed": "55/110" },
+                            { "arabic_name": "نصف بطة مع محاشي", "price_aed": 110 },
+                            { "english_name": "نصف بطة مشوية بالفرن", "price_aed": 100 },
+                            { "arabic_name": "كتف ضائي بالفرن", "price_aed": 200 }
+                        ]
+                    },
+                    "grills_al_nile": {
+                        "category_arabic": "مشاوي النيل",
+                        "category_english": "Grills Al-Nile",
+                        "notes": "Prices per portion / per kilo",
+                        "items": [
+                            { "arabic_name": "كباب", "english_name": "Lamb Kabab", "price_aed": "59 / 175" },
+                            { "arabic_name": "كفتة", "english_name": "Kofta", "price_aed": "55 / 160" },
+                            { "arabic_name": "ريش ضاني مشوية", "price_aed": "60 / 185" },
+                            { "arabic_name": "طرب", "english_name": "Tarb", "price_aed": "55 / 165" },
+                            { "arabic_name": "شيش طاووق", "price_aed": "50 / 125" },
+                            { "arabic_name": "مشاوي مشكلة النيل جورميه", "price_aed": "59 / 175" },
+                            { "arabic_name": "مشاوي مشكلة لحوم", "price_aed": "60 / 180" },
+                            { "arabic_name": "كبدة مشوية", "price_aed": 40 },
+                            { "arabic_name": "سجق مشوي", "price_aed": 45 },
+                            { "arabic_name": "حواوشي", "price_aed": 22 },
+                            { "arabic_name": "صدور دجاج مشوية", "price_aed": 40 },
+                            { "arabic_name": "موزة مشوية", "price_aed": 60 },
+                            { "arabic_name": "نصف فرخة مشوية", "price_aed": 35 }
+                        ]
+                    },
+                    "vegetables_and_tagens": {
+                        "category_arabic": "طواجن و خضار",
+                        "category_english": "Vegetables and Tagens",
+                        "items": [
+                            { "arabic_name": "ملوخية سادة", "price_aed": 38 },
+                            { "arabic_name": "ملوخية مع دجاج مقلي", "price_aed": 49 },
+                            { "arabic_name": "ملوخية مع مكعبات لحم مقلية", "price_aed": 54 },
+                            { "arabic_name": "طاجن مسقعة باللحم المفروم", "price_aed": 40 },
+                            { "arabic_name": "طاجن مسقعة بالبشاميل", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بطاطس بالدجاج", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس باللحم", "price_aed": 45 },
+                            { "arabic_name": "ورقة لحمة", "price_aed": 50 },
+                            { "arabic_name": "طاجن بامية سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بامية باللحم", "price_aed": 45 },
+                            { "arabic_name": "طاجن لحم بالبصل", "price_aed": 45 },
+                            { "arabic_name": "عكاوي بالبصل", "price_aed": 46 },
+                            { "arabic_name": "أرز معمر سادة", "price_aed": 30 },
+                            { "arabic_name": "أرز معمر باللحم", "price_aed": 50 },
+                            { "arabic_name": "رز معمر بالحمام", "price_aed": 70 },
+                            { "arabic_name": "ورق عنب بالكوارع", "price_aed": 50 },
+                            { "arabic_name": "طاجن موزة بالبطاطس", "price_aed": 65 }
+                        ]
+                    },
+                    "the_egyptian_feteer": {
+                        "category_arabic": "الفطير المصري",
+                        "category_english": "The Egyptian Feteer",
+                        "items": [
+                            { "arabic_name": "فطيرة مشلتت سادة", "price_aed": 69 },
+                            { "arabic_name": "فطيرة مكس جبن", "price_aed": 49 },
+                            { "arabic_name": "فطيرة مكس لحوم", "price_aed": 59 },
+                            { "arabic_name": "فطيرة خضار مشكلة", "price_aed": 49 },
+                            { "arabic_name": "فطيرة حلو النيل", "price_aed": 55 }
+                        ]
+                    },
+                    "side_dish": {
+                        "arabic_name": "أطباق جانبية",
+                        "english_name": "Side Dish",
+                        "items": [
+                            { "arabic_name": "أرز بالشعيرية", "price_aed": 15 },
+                            { "arabic_name": "أرز ابيض", "price_aed": 15 },
+                            { "arabic_name": "رز بالخلطة", "price_aed": 18 }
+                        ]
+                    },
+                    "feasts": {
+                        "arabic_name": "ولائم",
+                        "english_name": "Feasts",
+                        "items": [
+                            { "arabic_name": "وليمة فخدة ضاني", "price_aed": 350 },
+                            { "arabic_name": "وليمة مشاوي الملوك", "price_aed": 500 },
+                            { "arabic_name": "صينية محاشي مشكلة مع بطة", "price_aed": 280 },
+                            { "arabic_name": "صينية فتة مع 6 موزات", "price_aed": 360 },
+                            { "arabic_name": "وليمة مكس حمام", "price_aed": 500 },
+                            { "arabic_name": "وليمة خروف مع محاشي", "price_aed": 1400 },
+                            { "arabic_name": "وليمة خروف مع ارز باللخلطة", "price_aed": 1300 },
+                            { "arabic_name": "بطة كاملة مع محاشي", "price_aed": 260 },
+                            { "english_name": "ديك رومي في الفرن", "price_aed": 360 },
+                            { "arabic_name": "صنية رقاق", "price_aed": 120 },
+                            { "arabic_name": "صنية باشميل", "price_aed": 150 },
+                            { "arabic_name": "صنية ارز معمر مع لحمة", "price_aed": 160 }
+                        ]
+                    }
+                }
+            },
+            "en": {
+                "restaurant_name": "Nile Gourmet",
+                "tagline": "Authentic Egyptian Taste",
+                "contact_info": {
+                    "phone": "0584099255",
+                    "email": "gourmetnile@gmail.com",
+                    "website": "https://g.co/kgs/rL7jf96",
+                    "address": "Al Barsha South 3 Arjan, Rose Palace Building - Shop No. 15",
+                    "social_media": {
+                        "whatsapp": "971584099255",
+                        "instagram": "https://www.instagram.com/nilegourmet.ae/",
+                        "facebook": "https://www.facebook.com/alnilegourmet/"
+                    }
+                },
+                "menu": {
+                    "soups": {
+                        "category_arabic": "الشوربة",
+                        "category_english": "Soups",
+                        "items": [
+                            { "arabic_name": "شوربة عدس", "english_name": "Lentil Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة لسان عصفور", "english_name": "Orzo Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة كوارع", "english_name": "Trotters Soup", "price_aed": 25 }
+                        ]
+                    },
+                    "salads": {
+                        "category_arabic": "السلطات",
+                        "category_english": "Salads",
+                        "items": [
+                            { "arabic_name": "سلطة بلدي", "english_name": "Green Baladi Salad", "price_aed": 15 },
+                            { "arabic_name": "حمص", "english_name": "Hummus", "price_aed": 20 },
+                            { "arabic_name": "بابا غنوج", "english_name": "Baba Ghanoug", "price_aed": 20 },
+                            { "english_name": "(Garlic Dip - Tomeya)", "price_aed": 18 }
+                        ]
+                    },
+                    "hot_appetizers": {
+                        "category_arabic": "مقبلات ساخنة",
+                        "category_english": "Hot Appetizers",
+                        "items": [
+                            { "arabic_name": "سجق إسكندراني", "english_name": "Alexandrian Sausage", "price_aed": 31.99 },
+                            { "arabic_name": "كبدة إسكندراني", "english_name": "Alexandrian Beef Liver", "price_aed": 31.99 },
+                            { "arabic_name": "فراخ محمرة 1", "english_name": "1½ FRIED CHICKEN", "price_aed": 15 },
+                            { "arabic_name": "بطاطس مقلية", "price_aed": 15 }
+                        ]
+                    },
+                    "mahashi": {
+                        "category_arabic": "المحاشي",
+                        "category_english": "Mahashi (Stuffed Vegetables)",
+                        "items": [
+                            { "arabic_name": "ممبار", "english_name": "Mombar", "price_aed": 40 },
+                            { "arabic_name": "ورق عنب", "english_name": "Stuffed Vine Leaves", "price_aed": 30 },
+                            { "arabic_name": "محشي كرنب", "price_aed": 30 },
+                            { "arabic_name": "محاشي مشكلة", "price_aed": 40 },
+                            { "arabic_name": "محاشي مشكلة 1 كيلو", "price_aed": 70 }
+                        ]
+                    },
+                    "nile_specialties_dishes": {
+                        "category_arabic": "أطباق النيل المميزة",
+                        "category_english": "Nile Specialties Dishes",
+                        "items": [
+                            { "arabic_name": "مكرونة بشاميل", "english_name": "Macaroni Bechamel", "price_aed": 35 },
+                            { "arabic_name": "معكرونة بالسجق الشرقي", "price_aed": 35 },
+                            { "arabic_name": "رقاق باللحم المفروم", "price_aed": 30 },
+                            { "arabic_name": "إسكالوب دجاج", "price_aed": 35 },
+                            { "arabic_name": "فتة بمكعبات لحم بقري", "price_aed": 55 },
+                            { "arabic_name": "فتة موزة ضاني", "price_aed": 60 },
+                            { "arabic_name": "فتة مع كوارع", "price_aed": 55 },
+                            { "arabic_name": "دجاجة كاملة محشوة بالأرز", "price_aed": 50 },
+                            { "arabic_name": "حمام محشو بالأرز", "price_aed": "55/105" },
+                            { "arabic_name": "حمام محشو بالفريك", "price_aed": "55/110" },
+                            { "arabic_name": "نصف بطة مع محاشي", "price_aed": 110 },
+                            { "english_name": "نصف بطة مشوية بالفرن", "price_aed": 100 },
+                            { "arabic_name": "كتف ضائي بالفرن", "price_aed": 200 }
+                        ]
+                    },
+                    "grills_al_nile": {
+                        "category_arabic": "مشاوي النيل",
+                        "category_english": "Grills Al-Nile",
+                        "notes": "Prices per portion / per kilo",
+                        "items": [
+                            { "arabic_name": "كباب", "english_name": "Lamb Kabab", "price_aed": "59 / 175" },
+                            { "arabic_name": "كفتة", "english_name": "Kofta", "price_aed": "55 / 160" },
+                            { "arabic_name": "ريش ضاني مشوية", "price_aed": "60 / 185" },
+                            { "arabic_name": "طرب", "english_name": "Tarb", "price_aed": "55 / 165" },
+                            { "arabic_name": "شيش طاووق", "price_aed": "50 / 125" },
+                            { "arabic_name": "مشاوي مشكلة النيل جورميه", "price_aed": "59 / 175" },
+                            { "arabic_name": "مشاوي مشكلة لحوم", "price_aed": "60 / 180" },
+                            { "arabic_name": "كبدة مشوية", "price_aed": 40 },
+                            { "arabic_name": "سجق مشوي", "price_aed": 45 },
+                            { "arabic_name": "حواوشي", "price_aed": 22 },
+                            { "arabic_name": "صدور دجاج مشوية", "price_aed": 40 },
+                            { "arabic_name": "موزة مشوية", "price_aed": 60 },
+                            { "arabic_name": "نصف فرخة مشوية", "price_aed": 35 }
+                        ]
+                    },
+                    "vegetables_and_tagens": {
+                        "category_arabic": "طواجن و خضار",
+                        "category_english": "Vegetables and Tagens",
+                        "items": [
+                            { "arabic_name": "ملوخية سادة", "price_aed": 38 },
+                            { "arabic_name": "ملوخية مع دجاج مقلي", "price_aed": 49 },
+                            { "arabic_name": "ملوخية مع مكعبات لحم مقلية", "price_aed": 54 },
+                            { "arabic_name": "طاجن مسقعة باللحم المفروم", "price_aed": 40 },
+                            { "arabic_name": "طاجن مسقعة بالبشاميل", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بطاطس بالدجاج", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس باللحم", "price_aed": 45 },
+                            { "arabic_name": "ورقة لحمة", "price_aed": 50 },
+                            { "arabic_name": "طاجن بامية سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بامية باللحم", "price_aed": 45 },
+                            { "arabic_name": "طاجن لحم بالبصل", "price_aed": 45 },
+                            { "arabic_name": "عكاوي بالبصل", "price_aed": 46 },
+                            { "arabic_name": "أرز معمر سادة", "price_aed": 30 },
+                            { "arabic_name": "أرز معمر باللحم", "price_aed": 50 },
+                            { "arabic_name": "رز معمر بالحمام", "price_aed": 70 },
+                            { "arabic_name": "ورق عنب بالكوارع", "price_aed": 50 },
+                            { "arabic_name": "طاجن موزة بالبطاطس", "price_aed": 65 }
+                        ]
+                    },
+                    "the_egyptian_feteer": {
+                        "category_arabic": "الفطير المصري",
+                        "category_english": "The Egyptian Feteer",
+                        "items": [
+                            { "arabic_name": "فطيرة مشلتت سادة", "price_aed": 69 },
+                            { "arabic_name": "فطيرة مكس جبن", "price_aed": 49 },
+                            { "arabic_name": "فطيرة مكس لحوم", "price_aed": 59 },
+                            { "arabic_name": "فطيرة خضار مشكلة", "price_aed": 49 },
+                            { "arabic_name": "فطيرة حلو النيل", "price_aed": 55 }
+                        ]
+                    },
+                    "side_dish": {
+                        "arabic_name": "أطباق جانبية",
+                        "english_name": "Side Dish",
+                        "items": [
+                            { "arabic_name": "أرز بالشعيرية", "price_aed": 15 },
+                            { "arabic_name": "أرز ابيض", "price_aed": 15 },
+                            { "arabic_name": "رز بالخلطة", "price_aed": 18 }
+                        ]
+                    },
+                    "feasts": {
+                        "arabic_name": "ولائم",
+                        "english_name": "Feasts",
+                        "items": [
+                            { "arabic_name": "وليمة فخدة ضاني", "price_aed": 350 },
+                            { "arabic_name": "وليمة مشاوي الملوك", "price_aed": 500 },
+                            { "arabic_name": "صينية محاشي مشكلة مع بطة", "price_aed": 280 },
+                            { "arabic_name": "صينية فتة مع 6 موزات", "price_aed": 360 },
+                            { "arabic_name": "وليمة مكس حمام", "price_aed": 500 },
+                            { "arabic_name": "وليمة خروف مع محاشي", "price_aed": 1400 },
+                            { "arabic_name": "وليمة خروف مع ارز باللخلطة", "price_aed": 1300 },
+                            { "arabic_name": "بطة كاملة مع محاشي", "price_aed": 260 },
+                            { "english_name": "ديك رومي في الفرن", "price_aed": 360 },
+                            { "arabic_name": "صنية رقاق", "price_aed": 120 },
+                            { "arabic_name": "صنية باشميل", "price_aed": 150 },
+                            { "arabic_name": "صنية ارز معمر مع لحمة", "price_aed": 160 }
+                        ]
+                    }
+                }
+            },
+            "en": {
+                "restaurant_name": "Nile Gourmet",
+                "tagline": "Authentic Egyptian Taste",
+                "contact_info": {
+                    "phone": "0584099255",
+                    "email": "gourmetnile@gmail.com",
+                    "website": "https://g.co/kgs/rL7jf96",
+                    "address": "Al Barsha South 3 Arjan, Rose Palace Building - Shop No. 15",
+                    "social_media": {
+                        "whatsapp": "971584099255",
+                        "instagram": "https://www.instagram.com/nilegourmet.ae/",
+                        "facebook": "https://www.facebook.com/alnilegourmet/"
+                    }
+                },
+                "menu": {
+                    "soups": {
+                        "category_arabic": "الشوربة",
+                        "category_english": "Soups",
+                        "items": [
+                            { "arabic_name": "شوربة عدس", "english_name": "Lentil Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة لسان عصفور", "english_name": "Orzo Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة كوارع", "english_name": "Trotters Soup", "price_aed": 25 }
+                        ]
+                    },
+                    "salads": {
+                        "category_arabic": "السلطات",
+                        "category_english": "Salads",
+                        "items": [
+                            { "arabic_name": "سلطة بلدي", "english_name": "Green Baladi Salad", "price_aed": 15 },
+                            { "arabic_name": "حمص", "english_name": "Hummus", "price_aed": 20 },
+                            { "arabic_name": "بابا غنوج", "english_name": "Baba Ghanoug", "price_aed": 20 },
+                            { "english_name": "(Garlic Dip - Tomeya)", "price_aed": 18 }
+                        ]
+                    },
+                    "hot_appetizers": {
+                        "category_arabic": "مقبلات ساخنة",
+                        "category_english": "Hot Appetizers",
+                        "items": [
+                            { "arabic_name": "سجق إسكندراني", "english_name": "Alexandrian Sausage", "price_aed": 31.99 },
+                            { "arabic_name": "كبدة إسكندراني", "english_name": "Alexandrian Beef Liver", "price_aed": 31.99 },
+                            { "arabic_name": "فراخ محمرة 1", "english_name": "1½ FRIED CHICKEN", "price_aed": 15 },
+                            { "english_name": "بطاطس مقلية", "price_aed": 15 }
+                        ]
+                    },
+                    "mahashi": {
+                        "category_arabic": "المحاشي",
+                        "category_english": "Mahashi (Stuffed Vegetables)",
+                        "items": [
+                            { "arabic_name": "ممبار", "english_name": "Mombar", "price_aed": 40 },
+                            { "arabic_name": "ورق عنب", "english_name": "Stuffed Vine Leaves", "price_aed": 30 },
+                            { "arabic_name": "محشي كرنب", "price_aed": 30 },
+                            { "arabic_name": "محاشي مشكلة", "price_aed": 40 },
+                            { "arabic_name": "محاشي مشكلة 1 كيلو", "price_aed": 70 }
+                        ]
+                    },
+                    "nile_specialties_dishes": {
+                        "category_arabic": "أطباق النيل المميزة",
+                        "category_english": "Nile Specialties Dishes",
+                        "items": [
+                            { "arabic_name": "مكرونة بشاميل", "english_name": "Macaroni Bechamel", "price_aed": 35 },
+                            { "arabic_name": "معكرونة بالسجق الشرقي", "price_aed": 35 },
+                            { "arabic_name": "رقاق باللحم المفروم", "price_aed": 30 },
+                            { "arabic_name": "إسكالوب دجاج", "price_aed": 35 },
+                            { "arabic_name": "فتة بمكعبات لحم بقري", "price_aed": 55 },
+                            { "arabic_name": "فتة موزة ضاني", "price_aed": 60 },
+                            { "arabic_name": "فتة مع كوارع", "price_aed": 55 },
+                            { "arabic_name": "دجاجة كاملة محشوة بالأرز", "price_aed": 50 },
+                            { "arabic_name": "حمام محشو بالأرز", "price_aed": "55/105" },
+                            { "arabic_name": "حمام محشو بالفريك", "price_aed": "55/110" },
+                            { "arabic_name": "نصف بطة مع محاشي", "price_aed": 110 },
+                            { "english_name": "نصف بطة مشوية بالفرن", "price_aed": 100 },
+                            { "arabic_name": "كتف ضائي بالفرن", "price_aed": 200 }
+                        ]
+                    },
+                    "grills_al_nile": {
+                        "category_arabic": "مشاوي النيل",
+                        "category_english": "Grills Al-Nile",
+                        "notes": "Prices per portion / per kilo",
+                        "items": [
+                            { "arabic_name": "كباب", "english_name": "Lamb Kabab", "price_aed": "59 / 175" },
+                            { "arabic_name": "كفتة", "english_name": "Kofta", "price_aed": "55 / 160" },
+                            { "arabic_name": "ريش ضاني مشوية", "price_aed": "60 / 185" },
+                            { "arabic_name": "طرب", "english_name": "Tarb", "price_aed": "55 / 165" },
+                            { "arabic_name": "شيش طاووق", "price_aed": "50 / 125" },
+                            { "arabic_name": "مشاوي مشكلة النيل جورميه", "price_aed": "59 / 175" },
+                            { "arabic_name": "مشاوي مشكلة لحوم", "price_aed": "60 / 180" },
+                            { "arabic_name": "كبدة مشوية", "price_aed": 40 },
+                            { "arabic_name": "سجق مشوي", "price_aed": 45 },
+                            { "arabic_name": "حواوشي", "price_aed": 22 },
+                            { "arabic_name": "صدور دجاج مشوية", "price_aed": 40 },
+                            { "arabic_name": "موزة مشوية", "price_aed": 60 },
+                            { "arabic_name": "نصف فرخة مشوية", "price_aed": 35 }
+                        ]
+                    },
+                    "vegetables_and_tagens": {
+                        "category_arabic": "طواجن و خضار",
+                        "category_english": "Vegetables and Tagens",
+                        "items": [
+                            { "arabic_name": "ملوخية سادة", "price_aed": 38 },
+                            { "arabic_name": "ملوخية مع دجاج مقلي", "price_aed": 49 },
+                            { "arabic_name": "ملوخية مع مكعبات لحم مقلية", "price_aed": 54 },
+                            { "arabic_name": "طاجن مسقعة باللحم المفروم", "price_aed": 40 },
+                            { "arabic_name": "طاجن مسقعة بالبشاميل", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بطاطس بالدجاج", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس باللحم", "price_aed": 45 },
+                            { "arabic_name": "ورقة لحمة", "price_aed": 50 },
+                            { "arabic_name": "طاجن بامية سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بامية باللحم", "price_aed": 45 },
+                            { "arabic_name": "طاجن لحم بالبصل", "price_aed": 45 },
+                            { "arabic_name": "عكاوي بالبصل", "price_aed": 46 },
+                            { "arabic_name": "أرز معمر سادة", "price_aed": 30 },
+                            { "arabic_name": "أرز معمر باللحم", "price_aed": 50 },
+                            { "arabic_name": "رز معمر بالحمام", "price_aed": 70 },
+                            { "arabic_name": "ورق عنب بالكوارع", "price_aed": 50 },
+                            { "arabic_name": "طاجن موزة بالبطاطس", "price_aed": 65 }
+                        ]
+                    },
+                    "the_egyptian_feteer": {
+                        "category_arabic": "الفطير المصري",
+                        "category_english": "The Egyptian Feteer",
+                        "items": [
+                            { "arabic_name": "فطيرة مشلتت سادة", "price_aed": 69 },
+                            { "arabic_name": "فطيرة مكس جبن", "price_aed": 49 },
+                            { "arabic_name": "فطيرة مكس لحوم", "price_aed": 59 },
+                            { "arabic_name": "فطيرة خضار مشكلة", "price_aed": 49 },
+                            { "arabic_name": "فطيرة حلو النيل", "price_aed": 55 }
+                        ]
+                    },
+                    "side_dish": {
+                        "arabic_name": "أطباق جانبية",
+                        "english_name": "Side Dish",
+                        "items": [
+                            { "arabic_name": "أرز بالشعيرية", "price_aed": 15 },
+                            { "arabic_name": "أرز ابيض", "price_aed": 15 },
+                            { "arabic_name": "رز بالخلطة", "price_aed": 18 }
+                        ]
+                    },
+                    "feasts": {
+                        "arabic_name": "ولائم",
+                        "english_name": "Feasts",
+                        "items": [
+                            { "arabic_name": "وليمة فخدة ضاني", "price_aed": 350 },
+                            { "arabic_name": "وليمة مشاوي الملوك", "price_aed": 500 },
+                            { "arabic_name": "صينية محاشي مشكلة مع بطة", "price_aed": 280 },
+                            { "arabic_name": "صينية فتة مع 6 موزات", "price_aed": 360 },
+                            { "arabic_name": "وليمة مكس حمام", "price_aed": 500 },
+                            { "arabic_name": "وليمة خروف مع محاشي", "price_aed": 1400 },
+                            { "arabic_name": "وليمة خروف مع ارز باللخلطة", "price_aed": 1300 },
+                            { "arabic_name": "بطة كاملة مع محاشي", "price_aed": 260 },
+                            { "english_name": "ديك رومي في الفرن", "price_aed": 360 },
+                            { "arabic_name": "صنية رقاق", "price_aed": 120 },
+                            { "arabic_name": "صنية باشميل", "price_aed": 150 },
+                            { "arabic_name": "صنية ارز معمر مع لحمة", "price_aed": 160 }
+                        ]
+                    }
+                }
+            },
+            "en": {
+                "restaurant_name": "Nile Gourmet",
+                "tagline": "Authentic Egyptian Taste",
+                "contact_info": {
+                    "phone": "0584099255",
+                    "email": "gourmetnile@gmail.com",
+                    "website": "https://g.co/kgs/rL7jf96",
+                    "address": "Al Barsha South 3 Arjan, Rose Palace Building - Shop No. 15",
+                    "social_media": {
+                        "whatsapp": "971584099255",
+                        "instagram": "https://www.instagram.com/nilegourmet.ae/",
+                        "facebook": "https://www.facebook.com/alnilegourmet/"
+                    }
+                },
+                "menu": {
+                    "soups": {
+                        "category_arabic": "الشوربة",
+                        "category_english": "Soups",
+                        "items": [
+                            { "arabic_name": "شوربة عدس", "english_name": "Lentil Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة لسان عصفور", "english_name": "Orzo Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة كوارع", "english_name": "Trotters Soup", "price_aed": 25 }
+                        ]
+                    },
+                    "salads": {
+                        "category_arabic": "السلطات",
+                        "category_english": "Salads",
+                        "items": [
+                            { "arabic_name": "سلطة بلدي", "english_name": "Green Baladi Salad", "price_aed": 15 },
+                            { "arabic_name": "حمص", "english_name": "Hummus", "price_aed": 20 },
+                            { "arabic_name": "بابا غنوج", "english_name": "Baba Ghanoug", "price_aed": 20 },
+                            { "english_name": "(Garlic Dip - Tomeya)", "price_aed": 18 }
+                        ]
+                    },
+                    "hot_appetizers": {
+                        "category_arabic": "مقبلات ساخنة",
+                        "category_english": "Hot Appetizers",
+                        "items": [
+                            { "arabic_name": "سجق إسكندراني", "english_name": "Alexandrian Sausage", "price_aed": 31.99 },
+                            { "arabic_name": "كبدة إسكندراني", "english_name": "Alexandrian Beef Liver", "price_aed": 31.99 },
+                            { "arabic_name": "فراخ محمرة 1", "english_name": "1½ FRIED CHICKEN", "price_aed": 15 },
+                            { "english_name": "بطاطس مقلية", "price_aed": 15 }
+                        ]
+                    },
+                    "mahashi": {
+                        "category_arabic": "المحاشي",
+                        "category_english": "Mahashi (Stuffed Vegetables)",
+                        "items": [
+                            { "arabic_name": "ممبار", "english_name": "Mombar", "price_aed": 40 },
+                            { "arabic_name": "ورق عنب", "english_name": "Stuffed Vine Leaves", "price_aed": 30 },
+                            { "arabic_name": "محشي كرنب", "price_aed": 30 },
+                            { "arabic_name": "محاشي مشكلة", "price_aed": 40 },
+                            { "arabic_name": "محاشي مشكلة 1 كيلو", "price_aed": 70 }
+                        ]
+                    },
+                    "nile_specialties_dishes": {
+                        "category_arabic": "أطباق النيل المميزة",
+                        "category_english": "Nile Specialties Dishes",
+                        "items": [
+                            { "arabic_name": "مكرونة بشاميل", "english_name": "Macaroni Bechamel", "price_aed": 35 },
+                            { "arabic_name": "معكرونة بالسجق الشرقي", "price_aed": 35 },
+                            { "arabic_name": "رقاق باللحم المفروم", "price_aed": 30 },
+                            { "arabic_name": "إسكالوب دجاج", "price_aed": 35 },
+                            { "arabic_name": "فتة بمكعبات لحم بقري", "price_aed": 55 },
+                            { "arabic_name": "فتة موزة ضاني", "price_aed": 60 },
+                            { "arabic_name": "فتة مع كوارع", "price_aed": 55 },
+                            { "arabic_name": "دجاجة كاملة محشوة بالأرز", "price_aed": 50 },
+                            { "arabic_name": "حمام محشو بالأرز", "price_aed": "55/105" },
+                            { "arabic_name": "حمام محشو بالفريك", "price_aed": "55/110" },
+                            { "arabic_name": "نصف بطة مع محاشي", "price_aed": 110 },
+                            { "english_name": "نصف بطة مشوية بالفرن", "price_aed": 100 },
+                            { "arabic_name": "كتف ضائي بالفرن", "price_aed": 200 }
+                        ]
+                    },
+                    "grills_al_nile": {
+                        "category_arabic": "مشاوي النيل",
+                        "category_english": "Grills Al-Nile",
+                        "notes": "Prices per portion / per kilo",
+                        "items": [
+                            { "arabic_name": "كباب", "english_name": "Lamb Kabab", "price_aed": "59 / 175" },
+                            { "arabic_name": "كفتة", "english_name": "Kofta", "price_aed": "55 / 160" },
+                            { "arabic_name": "ريش ضاني مشوية", "price_aed": "60 / 185" },
+                            { "arabic_name": "طرب", "english_name": "Tarb", "price_aed": "55 / 165" },
+                            { "arabic_name": "شيش طاووق", "price_aed": "50 / 125" },
+                            { "arabic_name": "مشاوي مشكلة النيل جورميه", "price_aed": "59 / 175" },
+                            { "arabic_name": "مشاوي مشكلة لحوم", "price_aed": "60 / 180" },
+                            { "arabic_name": "كبدة مشوية", "price_aed": 40 },
+                            { "arabic_name": "سجق مشوي", "price_aed": 45 },
+                            { "arabic_name": "حواوشي", "price_aed": 22 },
+                            { "arabic_name": "صدور دجاج مشوية", "price_aed": 40 },
+                            { "arabic_name": "موزة مشوية", "price_aed": 60 },
+                            { "arabic_name": "نصف فرخة مشوية", "price_aed": 35 }
+                        ]
+                    },
+                    "vegetables_and_tagens": {
+                        "category_arabic": "طواجن و خضار",
+                        "category_english": "Vegetables and Tagens",
+                        "items": [
+                            { "arabic_name": "ملوخية سادة", "price_aed": 38 },
+                            { "arabic_name": "ملوخية مع دجاج مقلي", "price_aed": 49 },
+                            { "arabic_name": "ملوخية مع مكعبات لحم مقلية", "price_aed": 54 },
+                            { "arabic_name": "طاجن مسقعة باللحم المفروم", "price_aed": 40 },
+                            { "arabic_name": "طاجن مسقعة بالبشاميل", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بطاطس بالدجاج", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس باللحم", "price_aed": 45 },
+                            { "arabic_name": "ورقة لحمة", "price_aed": 50 },
+                            { "arabic_name": "طاجن بامية سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بامية باللحم", "price_aed": 45 },
+                            { "arabic_name": "طاجن لحم بالبصل", "price_aed": 45 },
+                            { "arabic_name": "عكاوي بالبصل", "price_aed": 46 },
+                            { "arabic_name": "أرز معمر سادة", "price_aed": 30 },
+                            { "arabic_name": "أرز معمر باللحم", "price_aed": 50 },
+                            { "arabic_name": "رز معمر بالحمام", "price_aed": 70 },
+                            { "arabic_name": "ورق عنب بالكوارع", "price_aed": 50 },
+                            { "arabic_name": "طاجن موزة بالبطاطس", "price_aed": 65 }
+                        ]
+                    },
+                    "the_egyptian_feteer": {
+                        "category_arabic": "الفطير المصري",
+                        "category_english": "The Egyptian Feteer",
+                        "items": [
+                            { "arabic_name": "فطيرة مشلتت سادة", "price_aed": 69 },
+                            { "arabic_name": "فطيرة مكس جبن", "price_aed": 49 },
+                            { "arabic_name": "فطيرة مكس لحوم", "price_aed": 59 },
+                            { "arabic_name": "فطيرة خضار مشكلة", "price_aed": 49 },
+                            { "arabic_name": "فطيرة حلو النيل", "price_aed": 55 }
+                        ]
+                    },
+                    "side_dish": {
+                        "arabic_name": "أطباق جانبية",
+                        "english_name": "Side Dish",
+                        "items": [
+                            { "arabic_name": "أرز بالشعيرية", "price_aed": 15 },
+                            { "arabic_name": "أرز ابيض", "price_aed": 15 },
+                            { "arabic_name": "رز بالخلطة", "price_aed": 18 }
+                        ]
+                    },
+                    "feasts": {
+                        "arabic_name": "ولائم",
+                        "english_name": "Feasts",
+                        "items": [
+                            { "arabic_name": "وليمة فخدة ضاني", "price_aed": 350 },
+                            { "arabic_name": "وليمة مشاوي الملوك", "price_aed": 500 },
+                            { "arabic_name": "صينية محاشي مشكلة مع بطة", "price_aed": 280 },
+                            { "arabic_name": "صينية فتة مع 6 موزات", "price_aed": 360 },
+                            { "arabic_name": "وليمة مكس حمام", "price_aed": 500 },
+                            { "arabic_name": "وليمة خروف مع محاشي", "price_aed": 1400 },
+                            { "arabic_name": "وليمة خروف مع ارز باللخلطة", "price_aed": 1300 },
+                            { "arabic_name": "بطة كاملة مع محاشي", "price_aed": 260 },
+                            { "english_name": "ديك رومي في الفرن", "price_aed": 360 },
+                            { "arabic_name": "صنية رقاق", "price_aed": 120 },
+                            { "arabic_name": "صنية باشميل", "price_aed": 150 },
+                            { "arabic_name": "صنية ارز معمر مع لحمة", "price_aed": 160 }
+                        ]
+                    }
+                }
+            },
+            "en": {
+                "restaurant_name": "Nile Gourmet",
+                "tagline": "Authentic Egyptian Taste",
+                "contact_info": {
+                    "phone": "0584099255",
+                    "email": "gourmetnile@gmail.com",
+                    "website": "https://g.co/kgs/rL7jf96",
+                    "address": "Al Barsha South 3 Arjan, Rose Palace Building - Shop No. 15",
+                    "social_media": {
+                        "whatsapp": "971584099255",
+                        "instagram": "https://www.instagram.com/nilegourmet.ae/",
+                        "facebook": "https://www.facebook.com/alnilegourmet/"
+                    }
+                },
+                "menu": {
+                    "soups": {
+                        "category_arabic": "الشوربة",
+                        "category_english": "Soups",
+                        "items": [
+                            { "arabic_name": "شوربة عدس", "english_name": "Lentil Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة لسان عصفور", "english_name": "Orzo Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة كوارع", "english_name": "Trotters Soup", "price_aed": 25 }
+                        ]
+                    },
+                    "salads": {
+                        "category_arabic": "السلطات",
+                        "category_english": "Salads",
+                        "items": [
+                            { "arabic_name": "سلطة بلدي", "english_name": "Green Baladi Salad", "price_aed": 15 },
+                            { "arabic_name": "حمص", "english_name": "Hummus", "price_aed": 20 },
+                            { "arabic_name": "بابا غنوج", "english_name": "Baba Ghanoug", "price_aed": 20 },
+                            { "english_name": "(Garlic Dip - Tomeya)", "price_aed": 18 }
+                        ]
+                    },
+                    "hot_appetizers": {
+                        "category_arabic": "مقبلات ساخنة",
+                        "category_english": "Hot Appetizers",
+                        "items": [
+                            { "arabic_name": "سجق إسكندراني", "english_name": "Alexandrian Sausage", "price_aed": 31.99 },
+                            { "arabic_name": "كبدة إسكندراني", "english_name": "Alexandrian Beef Liver", "price_aed": 31.99 },
+                            { "arabic_name": "فراخ محمرة 1", "english_name": "1½ FRIED CHICKEN", "price_aed": 15 },
+                            { "english_name": "بطاطس مقلية", "price_aed": 15 }
+                        ]
+                    },
+                    "mahashi": {
+                        "category_arabic": "المحاشي",
+                        "category_english": "Mahashi (Stuffed Vegetables)",
+                        "items": [
+                            { "arabic_name": "ممبار", "english_name": "Mombar", "price_aed": 40 },
+                            { "arabic_name": "ورق عنب", "english_name": "Stuffed Vine Leaves", "price_aed": 30 },
+                            { "arabic_name": "محشي كرنب", "price_aed": 30 },
+                            { "arabic_name": "محاشي مشكلة", "price_aed": 40 },
+                            { "arabic_name": "محاشي مشكلة 1 كيلو", "price_aed": 70 }
+                        ]
+                    },
+                    "nile_specialties_dishes": {
+                        "category_arabic": "أطباق النيل المميزة",
+                        "category_english": "Nile Specialties Dishes",
+                        "items": [
+                            { "arabic_name": "مكرونة بشاميل", "english_name": "Macaroni Bechamel", "price_aed": 35 },
+                            { "arabic_name": "معكرونة بالسجق الشرقي", "price_aed": 35 },
+                            { "arabic_name": "رقاق باللحم المفروم", "price_aed": 30 },
+                            { "arabic_name": "إسكالوب دجاج", "price_aed": 35 },
+                            { "arabic_name": "فتة بمكعبات لحم بقري", "price_aed": 55 },
+                            { "arabic_name": "فتة موزة ضاني", "price_aed": 60 },
+                            { "arabic_name": "فتة مع كوارع", "price_aed": 55 },
+                            { "arabic_name": "دجاجة كاملة محشوة بالأرز", "price_aed": 50 },
+                            { "arabic_name": "حمام محشو بالأرز", "price_aed": "55/105" },
+                            { "arabic_name": "حمام محشو بالفريك", "price_aed": "55/110" },
+                            { "arabic_name": "نصف بطة مع محاشي", "price_aed": 110 },
+                            { "english_name": "نصف بطة مشوية بالفرن", "price_aed": 100 },
+                            { "arabic_name": "كتف ضائي بالفرن", "price_aed": 200 }
+                        ]
+                    },
+                    "grills_al_nile": {
+                        "category_arabic": "مشاوي النيل",
+                        "category_english": "Grills Al-Nile",
+                        "notes": "Prices per portion / per kilo",
+                        "items": [
+                            { "arabic_name": "كباب", "english_name": "Lamb Kabab", "price_aed": "59 / 175" },
+                            { "arabic_name": "كفتة", "price_aed": "55 / 160" },
+                            { "arabic_name": "ريش ضاني مشوية", "price_aed": "60 / 185" },
+                            { "arabic_name": "طرب", "english_name": "Tarb", "price_aed": "55 / 165" },
+                            { "arabic_name": "شيش طاووق", "price_aed": "50 / 125" },
+                            { "arabic_name": "مشاوي مشكلة النيل جورميه", "price_aed": "59 / 175" },
+                            { "arabic_name": "مشاوي مشكلة لحوم", "price_aed": "60 / 180" },
+                            { "arabic_name": "كبدة مشوية", "price_aed": 40 },
+                            { "arabic_name": "سجق مشوي", "price_aed": 45 },
+                            { "arabic_name": "حواوشي", "price_aed": 22 },
+                            { "arabic_name": "صدور دجاج مشوية", "price_aed": 40 },
+                            { "arabic_name": "موزة مشوية", "price_aed": 60 },
+                            { "arabic_name": "نصف فرخة مشوية", "price_aed": 35 }
+                        ]
+                    },
+                    "vegetables_and_tagens": {
+                        "category_arabic": "طواجن و خضار",
+                        "category_english": "Vegetables and Tagens",
+                        "items": [
+                            { "arabic_name": "ملوخية سادة", "price_aed": 38 },
+                            { "arabic_name": "ملوخية مع دجاج مقلي", "price_aed": 49 },
+                            { "arabic_name": "ملوخية مع مكعبات لحم مقلية", "price_aed": 54 },
+                            { "arabic_name": "طاجن مسقعة باللحم المفروم", "price_aed": 40 },
+                            { "arabic_name": "طاجن مسقعة بالبشاميل", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بطاطس بالدجاج", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس باللحم", "price_aed": 45 },
+                            { "arabic_name": "ورقة لحمة", "price_aed": 50 },
+                            { "arabic_name": "طاجن بامية سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بامية باللحم", "price_aed": 45 },
+                            { "arabic_name": "طاجن لحم بالبصل", "price_aed": 45 },
+                            { "arabic_name": "عكاوي بالبصل", "price_aed": 46 },
+                            { "arabic_name": "أرز معمر سادة", "price_aed": 30 },
+                            { "arabic_name": "أرز معمر باللحم", "price_aed": 50 },
+                            { "arabic_name": "رز معمر بالحمام", "price_aed": 70 },
+                            { "arabic_name": "ورق عنب بالكوارع", "price_aed": 50 },
+                            { "arabic_name": "طاجن موزة بالبطاطس", "price_aed": 65 }
+                        ]
+                    },
+                    "the_egyptian_feteer": {
+                        "category_arabic": "الفطير المصري",
+                        "category_english": "The Egyptian Feteer",
+                        "items": [
+                            { "arabic_name": "فطيرة مشلتت سادة", "price_aed": 69 },
+                            { "arabic_name": "فطيرة مكس جبن", "price_aed": 49 },
+                            { "arabic_name": "فطيرة مكس لحوم", "price_aed": 59 },
+                            { "arabic_name": "فطيرة خضار مشكلة", "price_aed": 49 },
+                            { "arabic_name": "فطيرة حلو النيل", "price_aed": 55 }
+                        ]
+                    },
+                    "side_dish": {
+                        "arabic_name": "أطباق جانبية",
+                        "english_name": "Side Dish",
+                        "items": [
+                            { "arabic_name": "أرز بالشعيرية", "price_aed": 15 },
+                            { "arabic_name": "أرز ابيض", "price_aed": 15 },
+                            { "arabic_name": "رز بالخلطة", "price_aed": 18 }
+                        ]
+                    },
+                    "feasts": {
+                        "arabic_name": "ولائم",
+                        "english_name": "Feasts",
+                        "items": [
+                            { "arabic_name": "وليمة فخدة ضاني", "price_aed": 350 },
+                            { "arabic_name": "وليمة مشاوي الملوك", "price_aed": 500 },
+                            { "arabic_name": "صينية محاشي مشكلة مع بطة", "price_aed": 280 },
+                            { "arabic_name": "صينية فتة مع 6 موزات", "price_aed": 360 },
+                            { "arabic_name": "وليمة مكس حمام", "price_aed": 500 },
+                            { "arabic_name": "وليمة خروف مع محاشي", "price_aed": 1400 },
+                            { "arabic_name": "وليمة خروف مع ارز باللخلطة", "price_aed": 1300 },
+                            { "arabic_name": "بطة كاملة مع محاشي", "price_aed": 260 },
+                            { "english_name": "ديك رومي في الفرن", "price_aed": 360 },
+                            { "arabic_name": "صنية رقاق", "price_aed": 120 },
+                            { "arabic_name": "صنية باشميل", "price_aed": 150 },
+                            { "arabic_name": "صنية ارز معمر مع لحمة", "price_aed": 160 }
+                        ]
+                    }
+                }
+            },
+            "en": {
+                "restaurant_name": "Nile Gourmet",
+                "tagline": "Authentic Egyptian Taste",
+                "contact_info": {
+                    "phone": "0584099255",
+                    "email": "gourmetnile@gmail.com",
+                    "website": "https://g.co/kgs/rL7jf96",
+                    "address": "Al Barsha South 3 Arjan, Rose Palace Building - Shop No. 15",
+                    "social_media": {
+                        "whatsapp": "971584099255",
+                        "instagram": "https://www.instagram.com/nilegourmet.ae/",
+                        "facebook": "https://www.facebook.com/alnilegourmet/"
+                    }
+                },
+                "menu": {
+                    "soups": {
+                        "category_arabic": "الشوربة",
+                        "category_english": "Soups",
+                        "items": [
+                            { "arabic_name": "شوربة عدس", "english_name": "Lentil Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة لسان عصفور", "english_name": "Orzo Soup", "price_aed": 15 },
+                            { "arabic_name": "شوربة كوارع", "english_name": "Trotters Soup", "price_aed": 25 }
+                        ]
+                    },
+                    "salads": {
+                        "category_arabic": "السلطات",
+                        "category_english": "Salads",
+                        "items": [
+                            { "arabic_name": "سلطة بلدي", "english_name": "Green Baladi Salad", "price_aed": 15 },
+                            { "arabic_name": "حمص", "english_name": "Hummus", "price_aed": 20 },
+                            { "arabic_name": "بابا غنوج", "english_name": "Baba Ghanoug", "price_aed": 20 },
+                            { "english_name": "(Garlic Dip - Tomeya)", "price_aed": 18 }
+                        ]
+                    },
+                    "hot_appetizers": {
+                        "category_arabic": "مقبلات ساخنة",
+                        "category_english": "Hot Appetizers",
+                        "items": [
+                            { "arabic_name": "سجق إسكندراني", "english_name": "Alexandrian Sausage", "price_aed": 31.99 },
+                            { "arabic_name": "كبدة إسكندراني", "english_name": "Alexandrian Beef Liver", "price_aed": 31.99 },
+                            { "arabic_name": "فراخ محمرة 1", "english_name": "1½ FRIED CHICKEN", "price_aed": 15 },
+                            { "english_name": "بطاطس مقلية", "price_aed": 15 }
+                        ]
+                    },
+                    "mahashi": {
+                        "category_arabic": "المحاشي",
+                        "category_english": "Mahashi (Stuffed Vegetables)",
+                        "items": [
+                            { "arabic_name": "ممبار", "english_name": "Mombar", "price_aed": 40 },
+                            { "arabic_name": "ورق عنب", "english_name": "Stuffed Vine Leaves", "price_aed": 30 },
+                            { "arabic_name": "محشي كرنب", "price_aed": 30 },
+                            { "arabic_name": "محاشي مشكلة", "price_aed": 40 },
+                            { "arabic_name": "محاشي مشكلة 1 كيلو", "price_aed": 70 }
+                        ]
+                    },
+                    "nile_specialties_dishes": {
+                        "category_arabic": "أطباق النيل المميزة",
+                        "category_english": "Nile Specialties Dishes",
+                        "items": [
+                            { "arabic_name": "مكرونة بشاميل", "english_name": "Macaroni Bechamel", "price_aed": 35 },
+                            { "arabic_name": "معكرونة بالسجق الشرقي", "price_aed": 35 },
+                            { "arabic_name": "رقاق باللحم المفروم", "price_aed": 30 },
+                            { "arabic_name": "إسكالوب دجاج", "price_aed": 35 },
+                            { "arabic_name": "فتة بمكعبات لحم بقري", "price_aed": 55 },
+                            { "arabic_name": "فتة موزة ضاني", "price_aed": 60 },
+                            { "arabic_name": "فتة مع كوارع", "price_aed": 55 },
+                            { "arabic_name": "دجاجة كاملة محشوة بالأرز", "price_aed": 50 },
+                            { "arabic_name": "حمام محشو بالأرز", "price_aed": "55/105" },
+                            { "arabic_name": "حمام محشو بالفريك", "price_aed": "55/110" },
+                            { "arabic_name": "نصف بطة مع محاشي", "price_aed": 110 },
+                            { "english_name": "نصف بطة مشوية بالفرن", "price_aed": 100 },
+                            { "arabic_name": "كتف ضائي بالفرن", "price_aed": 200 }
+                        ]
+                    },
+                    "grills_al_nile": {
+                        "category_arabic": "مشاوي النيل",
+                        "category_english": "Grills Al-Nile",
+                        "notes": "Prices per portion / per kilo",
+                        "items": [
+                            { "arabic_name": "كباب", "english_name": "Lamb Kabab", "price_aed": "59 / 175" },
+                            { "arabic_name": "كفتة", "price_aed": "55 / 160" },
+                            { "arabic_name": "ريش ضاني مشوية", "price_aed": "60 / 185" },
+                            { "arabic_name": "طرب", "english_name": "Tarb", "price_aed": "55 / 165" },
+                            { "arabic_name": "شيش طاووق", "price_aed": "50 / 125" },
+                            { "arabic_name": "مشاوي مشكلة النيل جورميه", "price_aed": "59 / 175" },
+                            { "arabic_name": "مشاوي مشكلة لحوم", "price_aed": "60 / 180" },
+                            { "arabic_name": "كبدة مشوية", "price_aed": 40 },
+                            { "arabic_name": "سجق مشوي", "price_aed": 45 },
+                            { "arabic_name": "حواوشي", "price_aed": 22 },
+                            { "arabic_name": "صدور دجاج مشوية", "price_aed": 40 },
+                            { "arabic_name": "موزة مشوية", "price_aed": 60 },
+                            { "arabic_name": "نصف فرخة مشوية", "price_aed": 35 }
+                        ]
+                    },
+                    "vegetables_and_tagens": {
+                        "category_arabic": "طواجن و خضار",
+                        "category_english": "Vegetables and Tagens",
+                        "items": [
+                            { "arabic_name": "ملوخية سادة", "price_aed": 38 },
+                            { "arabic_name": "ملوخية مع دجاج مقلي", "price_aed": 49 },
+                            { "arabic_name": "ملوخية مع مكعبات لحم مقلية", "price_aed": 54 },
+                            { "arabic_name": "طاجن مسقعة باللحم المفروم", "price_aed": 40 },
+                            { "arabic_name": "طاجن مسقعة بالبشاميل", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بطاطس بالدجاج", "price_aed": 45 },
+                            { "arabic_name": "طاجن بطاطس باللحم", "price_aed": 45 },
+                            { "arabic_name": "ورقة لحمة", "price_aed": 50 },
+                            { "arabic_name": "طاجن بامية سادة", "price_aed": 35 },
+                            { "arabic_name": "طاجن بامية باللحم", "price_aed": 45 },
+                            { "arabic_name": "طاجن لحم بالبصل", "price_aed": 45 },
+                            { "arabic_name": "عكاوي بالبصل", "price_aed": 46 },
+                            { "arabic_name": "أرز معمر سادة", "price_aed": 30 },
+                            { "arabic_name": "أرز معمر باللحم", "price_aed": 50 },
+                            { "arabic_name": "رز معمر بالحمام", "price_aed": 70 },
+                            { "arabic_name": "ورق عنب بالكوارع", "price_aed": 50 },
+                            { "arabic_name": "طاجن موزة بالبطاطس", "price_aed": 65 }
+                        ]
+                    },
+                    "the_egyptian_feteer": {
+                        "category_arabic": "الفطير المصري",
+                        "category_english": "The Egyptian Feteer",
+                        "items": [
+                            { "arabic_name": "فطيرة مشلتت سادة", "price_aed": 69 },
+                            { "arabic_name": "فطيرة مكس جبن", "price_aed": 49 },
+                            { "arabic_name": "فطيرة مكس لحوم", "price_aed": 59 },
+                            { "arabic_name": "فطيرة خضار مشكلة", "price_aed": 49 },
+                            { "arabic_name": "فطيرة حلو النيل", "price_aed": 55 }
+                        ]
+                    },
+                    "side_dish": {
+                        "arabic_name": "أطباق جانبية",
+                        "english_name": "Side Dish",
+                        "items": [
+                            { "arabic_name": "أرز بالشعيرية", "price_aed": 15 },
+                            { "arabic_name": "أرز ابيض", "price_aed": 15 },
+                            { "arabic_name": "رز بالخلطة", "price_aed": 18 }
+                        ]
+                    },
+                    "feasts": {
+                        "arabic_name": "ولائم",
+                        "english_name": "Feasts",
+                        "items": [
+                            { "arabic_name": "وليمة فخدة ضاني", "price_aed": 350 },
+                            { "arabic_name": "وليمة مشاوي الملوك", "price_aed": 500 },
+                            { "arabic_name": "صينية محاشي مشكلة مع بطة", "price_aed": 280 },
+                            { "arabic_name": "صينية فتة مع 6 موزات", "price_aed": 360 },
+                            { "arabic_name": "وليمة مكس حمام", "price_aed": 500 },
+                            { "arabic_name": "وليمة خروف مع محاشي", "price_aed": 1400 },
+                            { "arabic_name": "وليمة خروف مع ارز باللخلطة", "price_aed": 1300 },
+                            { "arabic_name": "بطة كاملة مع محاشي", "price_aed": 260 },
+                            { "english_name": "ديك رومي في الفرن", "price_aed": 360 },
+                            { "arabic_name": "صنية رقاق", "price_aed": 120 },
+                            { "arabic_name": "صنية باشميل", "price_aed": 150 },
+                            { "arabic_name": "صنية ارز معمر مع لحمة", "price_aed": 160 }
+                        ]
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="header-bg">
+        <div class="header-overlay"></div>
+        <div class="header-content container mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="logo-container">
+                <img id="restaurant-logo" src="https://i.imgur.com/B7feQoN.jpeg" alt="شعار مطعم نايل جورميه"
+                    onerror="this.onerror=null;this.src='https://placehold.co/200x200/9CA3AF/ffffff?text=Logo';">
+            </div>
+            <h1 id="restaurant-name" class="restaurant-name mb-2"></h1>
+            <p id="restaurant-tagline" class="restaurant-tagline"></p>
+            <div class="contact-info-header">
+                <!-- Social media and Website/Map links -->
+                <a id="facebook-link" href="https://www.facebook.com/alnilegourmet/" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-5 h-5">
+                        <path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.35 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.42 19.12-40.42 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.35 504 379.78 504 256z"/>
+                    </svg>
+                    <span data-lang-key="facebook">فيسبوك</span>
+                </a>
+                <a id="whatsapp-link" href="#" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" class="w-5 h-5">
+                        <path d="M380.9 97.1C339.4 55.6 283.8 32 224 32c-122.9 0-222 99.1-222 222 0 39.1 10.2 77.3 29.7 111l-34.9 102.3c-2.3 6.7 4.1 13.5 10.7 11.3l102.3-34.9c33.7 19.5 71.9 29.7 111 29.7h1c122.9 0 222-99.1-222-222 0-59.8-23.6-115.4-65.1-156.9zm-40.6 198.9c-1.4 2.5-3.8 5.6-6.4 7.9-2.3 2.1-4.7 3.5-7.2 4.8s-5.6 2.3-8.8 3.5c-3.2 1.2-6.5 2.1-9.9 2.7-3.4.6-6.8.9-10.3.9-6.5 0-12.9-.8-19.1-2.4-6.3-1.6-12.5-3.9-18.4-7-5.9-3.1-11.1-7.1-15.8-11.9-4.7-4.8-8.8-10.4-12.2-16.6-3.4-6.2-6.1-12.8-8-19.8-1.9-7-2.9-14.3-2.9-21.7 0-11.6 4.7-21.6 14.1-30.9 9.4-9.4 19.4-14.1 30.9-14.1 3.9 0 7.8.4 11.6 1.1s7.5 1.8 11.1 3.2c3.6 1.4 6.9 3.2 9.9 5.5s5.6 4.8 7.6 7.4c2 2.6 3.5 5.5 4.5 8.7s1.5 6.6 1.5 10c0 4.3-.7 8.5-2.2 12.6s-3.7 7.7-6.5 11.1c-2.8 3.4-6.2 6.5-10.1 9.3-3.9 2.8-8.3 5.3-12.8 7.3-4.5 2-9.2 3.8-14 5.3-4.8 1.5-9.8 2.8-14.9 3.8-5.1 1-10.4 1.8-15.8 2.2-5.4.4-11.1.6-17 .6-11.6 0-22.9-2.3-33.8-6.8-10.9-4.5-20.6-10.9-29.1-19.1-8.5-8.2-15.5-17.9-21-29.2-5.5-11.3-8.2-23.7-8.2-37.2 0-13.5 2.7-25.9 8.2-37.2s12.5-21 21-29.2c8.5-8.2 18.2-14.6 29.1-19.1-10.9 4.5-22.2 6.8-33.8-6.8 11.6 0 22.9 2.3 33.8 6.8 10.9 4.5 20.6 10.9 29.1 19.1 8.5 8.2 15.5 17.9 21 29.2 5.5 11.3 8.2 23.7 8.2 37.2 0 13.5-2.7 25.9-8.2 37.2s12.5-21 21-29.2c8.5-8.2 18.2-14.6-29.1-19.1-10.9 4.5-22.2 6.8-33.8-6.8z"/>
+                    </svg>
+                    <span data-lang-key="whatsapp">واتساب</span>
+                </a>
+                <a id="instagram-link" href="#" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" class="w-5 h-5">
+                        <path d="M224.1 140.6c-35.3-35.3-86.2-35.3-121.5 0-35.3 35.3-35.3 86.2 0 121.5 35.3 35.3 86.2 35.3 121.5 0 35.3-35.3 35.3-86.2 0-121.5zM380.9 97.1c-41.5-41.5-108.8-41.5-150.3 0-41.5 41.5-41.5 108.8 0 150.3 41.5 41.5 108.8 41.5 150.3 0 41.5-41.5 41.5-108.8 0-150.3zM224 352c-70.7 0-128-57.3-128-128s57.3-128 128-128 128 57.3 128 128-57.3 128-128 128zm-64-160c0-35.3 28.7-64 64-64s64 28.7 64 64-28.7 64-64 64-64-28.7-64-64zm192-32c0-17.7 14.3-32 32-32s32 14.3 32 32-14.3 32-32 32-32-14.3-32-32z"/>
+                    </svg>
+                    <span data-lang-key="instagram">انستغرام</span>
+                </a>
+                <a id="contact-website-header" href="#" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.028 6.028 0 0110.334 0L10 14.416 4.332 8.027z" clip-rule="evenodd" />
+                    </svg>
+                    <span data-lang-key="website">الموقع</span>
+                </a>
+                <!-- Phone and Address -->
+                <p id="contact-phone-header"></p>
+                <p id="contact-address-header"></p>
+            </div>
+            <button id="langToggleBtn" class="mt-4" data-lang-key="toggle_lang">English</button>
+        </div>
+    </div>
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 flex flex-col flex-grow">
+        <!-- Global Suggest Dish Section -->
+        <section class="global-suggest-section">
+            <h2 data-lang-key="confused_title">هل أنت حائر؟ دعنا نساعدك!</h2>
+            <button id="globalSuggestButton" class="global-suggest-button">
+                ✨ <span data-lang-key="suggest_main_dish">اقتراح طبق رئيسي</span>
+            </button>
+            <div id="globalSuggestionOutput" class="global-suggestion-output"></div>
+        </section>
+
+        <!-- Menu Book Container (for magazine-like navigation) -->
+        <div class="menu-book-container flex-grow">
+            <!-- Menu categories will be rendered here by JavaScript as "pages" -->
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <button id="prevButton" class="nav-button" data-lang-key="previous">السابق</button>
+            <button id="nextButton" class="nav-button" data-lang-key="next">التالي</button>
+        </div>
+
+        <!-- Feedback Section -->
+        <section class="feedback-section">
+            <h2 data-lang-key="feedback_title">شاركنا رأيك!</h2>
+            <button id="openFeedbackModalBtn" class="feedback-button" data-lang-key="leave_feedback">
+                ⭐ اترك تقييمك
+            </button>
+            <div id="feedbackList" class="feedback-list">
+                <h3 class="text-xl font-semibold mb-4" data-lang-key="customer_reviews">تقييمات العملاء:</h3>
+                <!-- Feedback items will be loaded here -->
+                <p id="noFeedbackMessage" class="text-gray-400" data-lang-key="no_feedback_yet">لا توجد تقييمات حتى الآن. كن أول من يترك تقييمًا!</p>
+            </div>
+        </section>
+
+        <!-- Feedback Modal -->
+        <div id="feedbackModal" class="feedback-modal">
+            <div class="feedback-modal-content">
+                <span class="close-button" id="closeFeedbackModalBtn">&times;</span>
+                <h3 class="text-2xl font-bold mb-4 text-center text-white" data-lang-key="rate_us">قيمنا!</h3>
+                <div class="star-rating text-center" dir="ltr">
+                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="5 stars">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="5 stars">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="5 stars">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="5 stars">★</label>
+                </div>
+                <textarea id="feedbackComment" placeholder="اكتب تعليقك هنا..." data-lang-key="write_comment_placeholder"></textarea>
+                <button id="submitFeedbackBtn" class="feedback-submit-btn w-full" data-lang-key="submit_feedback">إرسال التقييم</button>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <footer class="text-center mt-12 py-6 rounded-xl shadow-lg text-sm">
+            <p data-lang-key="footer_copyright">&copy; 2024 نايل غورميه. جميع الحقوق محفوظة.</p>
+            <p class="mt-2 text-xs" data-lang-key="footer_tagline">نحن نستخدم أفضل المكونات لتقديم تجربة طعام لا تُنسى.</p>
+        </footer>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button onclick="topFunction()" id="backToTopBtn" title="العودة للأعلى">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M11.47 7.72a.75.75 0 011.06 0l7.5 7.5a.75.75 0 11-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 01-1.06-1.06l7.5-7.5z" clip-rule="evenodd" />
+        </svg>
+    </button>
+
+    <script>
+        // Global functions for scroll-to-top button
+        function scrollFunction() {
+            const backToTopBtn = document.getElementById("backToTopBtn");
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+        // Attach scroll event listener globally
+        window.addEventListener('scroll', scrollFunction);
+    </script>
+
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase variables
+        let app, db, auth;
+        let userId = 'anonymous'; // Default to anonymous
+
+        // Initialize Firebase
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        if (Object.keys(firebaseConfig).length > 0) {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            // Sign in anonymously or with custom token
+            if (typeof __initial_auth_token !== 'undefined') {
+                signInWithCustomToken(auth, __initial_auth_token)
+                    .then((userCredential) => {
+                        userId = userCredential.user.uid;
+                        console.log("Signed in with custom token:", userId);
+                        setupFeedbackListener(); // Start listening for feedback after auth
+                    })
+                    .catch((error) => {
+                        console.error("Error signing in with custom token:", error);
+                        signInAnonymously(auth)
+                            .then(() => {
+                                userId = auth.currentUser.uid;
+                                console.log("Signed in anonymously:", userId);
+                                setupFeedbackListener(); // Start listening for feedback after auth
+                            })
+                            .catch((anonError) => {
+                                console.error("Error signing in anonymously:", anonError);
+                            });
+                    });
+            } else {
+                signInAnonymously(auth)
+                    .then(() => {
+                        userId = auth.currentUser.uid;
+                        console.log("Signed in anonymously:", userId);
+                        setupFeedbackListener(); // Start listening for feedback after auth
+                    })
+                    .catch((error) => {
+                        console.error("Error signing in anonymously:", error);
+                    });
+            }
+        } else {
+            console.warn("Firebase config not found. Feedback feature will not be available.");
+            // Disable feedback button if Firebase is not configured
+            document.getElementById('openFeedbackModalBtn').disabled = true;
+        }
+
+        // Language specific texts
+        const translations = {
+            "ar": {
+                "toggle_lang": "English",
+                "facebook": "فيسبوك",
+                "whatsapp": "واتساب",
+                "instagram": "انستغرام",
+                "website": "الموقع",
+                "confused_title": "هل أنت حائر؟ دعنا نساعدك!",
+                "suggest_main_dish": "اقتراح طبق لك", // Updated text
+                "previous": "السابق",
+                "next": "التالي",
+                "footer_copyright": "&copy; 2024 نايل غورميه. جميع الحقوق محفوظة.",
+                "footer_tagline": "نحن نستخدم أفضل المكونات لتقديم تجربة طعام لا تُنسى.",
+                "description_button": "وصف الطبق",
+                "pairing_button": "اقتراح طبق جانبي",
+                "nutritional_button": "معلومات غذائية",
+                "loading_description": "جاري تحميل الوصف...",
+                "loading_pairing": "جاري البحث عن اقتراحات...",
+                "loading_nutritional": "جاري حساب المعلومات الغذائية...",
+                "loading_global_suggest": "جارٍ التفكير في طبق لذيذ لك...", // Updated text
+                "error_description": "عذراً، لم نتمكن من الحصول على وصف لهذا الطبق في الوقت الحالي.",
+                "error_pairing": "عذراً، لم نتمكن من العثور على اقتراح في الوقت الحالي.",
+                "error_nutritional": "عذراً، لم نتمكن من العثور على معلومات غذائية لهذا الطبق.",
+                "error_global_suggest": "عذراً، لم نتمكن من اقتراح طبق في الوقت الحالي.",
+                "retry_message": "حدث خطأ أثناء التحميل. يرجى المحاولة مرة أخرى.",
+                "feedback_title": "شاركنا رأيك!",
+                "leave_feedback": "⭐ اترك تقييمك",
+                "customer_reviews": "تقييمات العملاء:",
+                "no_feedback_yet": "لا توجد تقييمات حتى الآن. كن أول من يترك تقييمًا!",
+                "rate_us": "قيمنا!",
+                "write_comment_placeholder": "اكتب تعليقك هنا...",
+                "submit_feedback": "إرسال التقييم",
+                "feedback_submitted": "شكراً لتقييمك!",
+                "feedback_error": "حدث خطأ أثناء إرسال التقييم. يرجى المحاولة مرة أخرى."
+            },
+            "en": {
+                "toggle_lang": "العربية",
+                "facebook": "Facebook",
+                "whatsapp": "WhatsApp",
+                "instagram": "Instagram",
+                "website": "Website",
+                "confused_title": "Confused? Let us help you!",
+                "suggest_main_dish": "Suggest a Dish for You", // Updated text
+                "previous": "Previous",
+                "next": "Next",
+                "footer_copyright": "&copy; 2024 Nile Gourmet. All rights reserved.",
+                "footer_tagline": "We use the finest ingredients to deliver an unforgettable dining experience.",
+                "description_button": "Dish Description",
+                "pairing_button": "Pairing Suggestion",
+                "nutritional_button": "Nutritional Info",
+                "loading_description": "Loading description...",
+                "loading_pairing": "Searching for suggestions...",
+                "loading_nutritional": "Calculating nutritional information...",
+                "loading_global_suggest": "Thinking of a delicious dish for you...", // Updated text
+                "error_description": "Sorry, we couldn't get a description for this dish at the moment.",
+                "error_pairing": "Sorry, we couldn't find a suggestion at the moment.",
+                "error_nutritional": "Sorry, we couldn't find nutritional information for this dish.",
+                "error_global_suggest": "Sorry, we couldn't suggest a dish at the moment.",
+                "retry_message": "An error occurred while loading. Please try again.",
+                "feedback_title": "Share Your Opinion!",
+                "leave_feedback": "⭐ Leave Your Review",
+                "customer_reviews": "Customer Reviews:",
+                "no_feedback_yet": "No reviews yet. Be the first to leave one!",
+                "rate_us": "Rate Us!",
+                "write_comment_placeholder": "Write your comment here...",
+                "submit_feedback": "Submit Review",
+                "feedback_submitted": "Thank you for your review!",
+                "feedback_error": "An error occurred while submitting feedback. Please try again."
+            }
+        };
+
+        // Get elements to populate
+        const restaurantNameElement = document.getElementById('restaurant-name');
+        const restaurantTaglineElement = document.getElementById('restaurant-tagline');
+        const restaurantLogoElement = document.getElementById('restaurant-logo');
+        const contactPhoneHeader = document.getElementById('contact-phone-header');
+        const whatsappLink = document.getElementById('whatsapp-link');
+        const instagramLink = document.getElementById('instagram-link');
+        const facebookLink = document.getElementById('facebook-link');
+        const contactWebsiteHeader = document.getElementById('contact-website-header');
+        const contactAddressHeader = document.getElementById('contact-address-header');
+        const menuBookContainer = document.querySelector('.menu-book-container');
+        const globalSuggestButton = document.getElementById('globalSuggestButton');
+        const globalSuggestionOutput = document.getElementById('globalSuggestionOutput');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        const langToggleBtn = document.getElementById("langToggleBtn");
+
+        // Feedback elements (declared once here, using let to allow re-assignment if script re-runs in some environments)
+        let openFeedbackModalBtn;
+        let feedbackModal;
+        let closeFeedbackModalBtn;
+        let feedbackCommentInput;
+        let submitFeedbackBtn;
+        let feedbackListDiv;
+        let noFeedbackMessage;
+
+        // Ensure these elements are selected and event listeners are attached only once after DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            openFeedbackModalBtn = document.getElementById('openFeedbackModalBtn');
+            feedbackModal = document.getElementById('feedbackModal');
+            closeFeedbackModalBtn = document.getElementById('closeFeedbackModalBtn');
+            feedbackCommentInput = document.getElementById('feedbackComment');
+            submitFeedbackBtn = document.getElementById('submitFeedbackBtn');
+            feedbackListDiv = document.getElementById('feedbackList');
+            noFeedbackMessage = document.getElementById('noFeedbackMessage');
+
+            // Attach event listeners for feedback modal
+            if (openFeedbackModalBtn) {
+                openFeedbackModalBtn.addEventListener('click', () => {
+                    feedbackModal.style.display = 'flex'; // Use flex to center
+                });
+            }
+            if (closeFeedbackModalBtn) {
+                closeFeedbackModalBtn.addEventListener('click', () => {
+                    feedbackModal.style.display = 'none';
+                    // Clear rating and comment when closing
+                    document.querySelectorAll('.star-rating input').forEach(radio => radio.checked = false);
+                    feedbackCommentInput.value = '';
+                });
+            }
+            // Close modal if clicked outside content
+            window.addEventListener('click', (event) => {
+                if (event.target === feedbackModal) {
+                    feedbackModal.style.display = 'none';
+                    document.querySelectorAll('.star-rating input').forEach(radio => radio.checked = false);
+                    feedbackCommentInput.value = '';
+                }
+            });
+
+            if (submitFeedbackBtn) {
+                submitFeedbackBtn.addEventListener('click', async () => {
+                    const rating = document.querySelector('.star-rating input:checked')?.value;
+                    const comment = feedbackCommentInput.value.trim();
+
+                    if (!rating) {
+                        alert(currentLanguage === 'ar' ? 'الرجاء اختيار تقييم بالنجوم.' : 'Please select a star rating.');
+                        return;
+                    }
+
+                    if (db) {
+                        try {
+                            await addDoc(collection(db, `artifacts/${appId}/public/data/feedback`), {
+                                rating: parseInt(rating),
+                                comment: comment,
+                                timestamp: serverTimestamp(),
+                                userId: userId // Store user ID (anonymous or authenticated)
+                            });
+                            alert(translations[currentLanguage].feedback_submitted);
+                            feedbackModal.style.display = 'none';
+                            document.querySelectorAll('.star-rating input').forEach(radio => radio.checked = false);
+                            feedbackCommentInput.value = '';
+                        } catch (e) {
+                            console.error("Error adding document: ", e);
+                            alert(translations[currentLanguage].feedback_error);
+                        }
+                    } else {
+                        alert(currentLanguage === 'ar' ? 'لا يمكن إرسال التقييم: Firebase غير متاح.' : 'Cannot submit feedback: Firebase not available.');
+                    }
+                });
+            }
+
+            // Setup real-time listener for feedback if Firebase is initialized
+            if (db && auth && userId !== 'anonymous') { // Ensure Firebase is ready before setting up listener
+                setupFeedbackListener();
+            }
+        });
+
+
+        let currentLanguage = 'ar'; // Default language
+        let currentCategoryIndex = 0;
+        let categories = Object.values(restaurantData[currentLanguage].menu); // Get categories as an array
+        let categoryKeys = Object.keys(restaurantData[currentLanguage].menu); // Get category keys as an array
+
+        // Function to update all text content based on current language
+        function updateLanguageUI() {
+            const langData = restaurantData[currentLanguage];
+            const htmlElement = document.documentElement;
+
+            htmlElement.lang = currentLanguage;
+            htmlElement.dir = (currentLanguage === 'ar' ? 'rtl' : 'ltr');
+
+            restaurantNameElement.textContent = langData.restaurant_name;
+            restaurantTaglineElement.textContent = langData.tagline;
+
+            // Update contact info
+            contactPhoneHeader.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h13A1.5 1.5 0 0118 3.5v13a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 012 16.5v-13zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+            </svg> ${langData.contact_info.phone}`;
+            contactAddressHeader.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+            </svg> ${langData.contact_info.address}`;
+
+            // Update elements with data-lang-key attribute
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+
+            // Re-render menu categories to update titles and item names
+            menuBookContainer.innerHTML = ''; // Clear existing categories
+            categories = Object.values(restaurantData[currentLanguage].menu); // Update categories for current language
+            categoryKeys = Object.keys(restaurantData[currentLanguage].menu);
+            categories.forEach((category, index) => {
+                renderCategoryPage(category, index);
+            });
+            showCategory(currentCategoryIndex); // Show current category
+
+            // Update placeholder for feedback comment
+            if (feedbackCommentInput) { // Check if element exists before updating
+                feedbackCommentInput.placeholder = translations[currentLanguage].write_comment_placeholder;
+            }
+        }
+
+        // Initial language setup
+        updateLanguageUI();
+
+        // Language toggle event listener
+        langToggleBtn.addEventListener('click', () => {
+            currentLanguage = (currentLanguage === 'ar' ? 'en' : 'ar');
+            updateLanguageUI();
+        });
+
+        // Populate restaurant header info
+        // Changed src to directly use the Imgur URL for better reliability
+        restaurantLogoElement.src = "https://i.imgur.com/B7feQoN.jpeg";
+        // Fallback to a generic placeholder if the Imgur link fails
+        restaurantLogoElement.onerror = function() {
+            this.onerror=null;
+            this.src='https://placehold.co/200x200/9CA3AF/ffffff?text=Logo';
+        };
+
+
+        // Populate contact info in header (links remain static, text updates with language)
+        whatsappLink.href = `https://wa.me/${restaurantData.ar.contact_info.social_media.whatsapp}`;
+        instagramLink.href = restaurantData.ar.contact_info.social_media.instagram;
+        facebookLink.href = restaurantData.ar.contact_info.social_media.facebook;
+        contactWebsiteHeader.href = restaurantData.ar.contact_info.website;
+
+
+        // Function to hide all LLM generated content divs for a given menu item
+        function hideAllLLMContent(menuItemElement) {
+            const llmContentDivs = menuItemElement.querySelectorAll('.llm-info-content');
+            llmContentDivs.forEach(div => div.classList.remove('active'));
+        }
+
+        // Function to call Gemini API for dish description
+        async function getDishDescription(arabicName, englishName, descriptionDiv, button, menuItemElement) {
+            hideAllLLMContent(menuItemElement); // Hide others before showing this one
+            descriptionDiv.innerHTML = `<span class="loading-spinner"></span> ${translations[currentLanguage].loading_description}`;
+            descriptionDiv.classList.add('active');
+            button.disabled = true;
+
+            let chatHistory = [];
+            // Added a random number to the prompt to encourage varied responses
+            const prompt = `Write a creative and concise description (within 30 words) for the following dish, focusing on key ingredients and taste, in both Arabic and English.
+            Dish Arabic Name: ${arabicName}
+            Dish English Name: ${englishName}
+            Random Seed: ${Math.random()}
+            `;
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = { 
+                contents: chatHistory,
+                generationConfig: {
+                    temperature: 0.8 // Added temperature for varied responses
+                }
+            };
+            const apiKey = "AIzaSyAMnqgaqqv-5ESDpWO_Ai_pThHybdHWBhY"; // Canvas will provide this key at runtime
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    descriptionDiv.textContent = text;
+                } else {
+                    descriptionDiv.textContent = translations[currentLanguage].error_description + '. ' + translations[currentLanguage].retry_message;
+                    console.error('Unexpected API response structure:', result);
+                }
+            } catch (error) {
+                console.error('Error fetching dish description:', error);
+                descriptionDiv.textContent = translations[currentLanguage].retry_message;
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Function to call Gemini API for pairing suggestion
+        async function getPairingSuggestion(arabicName, englishName, suggestionDiv, button, menuItemElement) {
+            hideAllLLMContent(menuItemElement); // Hide others before showing this one
+            suggestionDiv.innerHTML = `<span class="loading-spinner"></span> ${translations[currentLanguage].loading_pairing}`;
+            suggestionDiv.classList.add('active');
+            button.disabled = true;
+
+            let chatHistory = [];
+            // Added a random number to the prompt to encourage varied responses
+            const prompt = `Suggest one side dish or drink that pairs well with the following main dish. Make the suggestion concise and appealing (within 20 words) and mention it in both Arabic and English.
+            Main Dish Arabic Name: ${arabicName}
+            Main Dish English Name: ${englishName}
+            Random Seed: ${Math.random()}
+            `;
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = { 
+                contents: chatHistory,
+                generationConfig: {
+                    temperature: 0.8 // Added temperature for varied responses
+                }
+            };
+            const apiKey = "AIzaSyAMnqgaqqv-5ESDpWO_Ai_pThHybdHWBhY"; // Canvas will provide this key at runtime
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    suggestionDiv.textContent = text;
+                } else {
+                    suggestionDiv.textContent = translations[currentLanguage].error_pairing + '. ' + translations[currentLanguage].retry_message;
+                    console.error('Unexpected API response structure:', result);
+                }
+            } catch (error) {
+                console.error('Error fetching pairing suggestion:', error);
+                suggestionDiv.textContent = translations[currentLanguage].retry_message;
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Function to call Gemini API for nutritional information
+        async function getNutritionalInfo(arabicName, englishName, nutritionalDiv, button, menuItemElement) {
+            hideAllLLMContent(menuItemElement); // Hide others before showing this one
+            nutritionalDiv.innerHTML = `<span class="loading-spinner"></span> ${translations[currentLanguage].loading_nutritional}`;
+            nutritionalDiv.classList.add('active');
+            button.disabled = true;
+
+            let chatHistory = [];
+            // Added a random number to the prompt to encourage varied responses
+            const prompt = `Provide brief estimated nutritional information (calories, proteins, carbohydrates, fats) for the following dish in both Arabic and English. (within 40 words)
+            Dish Name: ${arabicName} (${englishName})
+            Random Seed: ${Math.random()}
+            `;
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = { 
+                contents: chatHistory,
+                generationConfig: {
+                    temperature: 0.8 // Added temperature for varied responses
+                }
+            };
+            const apiKey = "AIzaSyAMnqgaqqv-5ESDpWO_Ai_pThHybdHWBhY"; // Canvas will provide this key at runtime
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    nutritionalDiv.textContent = text;
+                } else {
+                    nutritionalDiv.textContent = translations[currentLanguage].error_nutritional + '. ' + translations[currentLanguage].retry_message;
+                    console.error('Unexpected API response structure:', result);
+                }
+            } catch (error) {
+                console.error('Error fetching nutritional info:', error);
+                nutritionalDiv.textContent = translations[currentLanguage].retry_message;
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Function to call Gemini API for global dish suggestion
+        async function getGlobalDishSuggestion(suggestionDiv, button) {
+            suggestionDiv.innerHTML = `<span class="loading-spinner"></span> ${translations[currentLanguage].loading_global_suggest}`;
+            suggestionDiv.classList.add('active');
+            button.disabled = true;
+
+            let chatHistory = [];
+            // Added a random number to the prompt to encourage varied responses
+            const prompt = `Suggest one main dish from Egyptian cuisine suitable for a luxurious dinner, with a brief description in both Arabic and English. (within 50 words)
+            Random Seed: ${Math.random()}
+            `;
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = { 
+                contents: chatHistory,
+                generationConfig: {
+                    temperature: 0.8 // Added temperature for varied responses
+                }
+            };
+            const apiKey = "AIzaSyAMnqgaqqv-5ESDpWO_Ai_pThHybdHWBhY"; // Canvas will provide this key at runtime
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            console.log('Attempting to fetch global dish suggestion with prompt:', prompt); // Added log
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                console.log('Global dish suggestion API response:', result); // Added log
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    suggestionDiv.textContent = text;
+                } else {
+                    // More specific error message for unexpected API response structure
+                    suggestionDiv.textContent = translations[currentLanguage].error_global_suggest + '. ' + translations[currentLanguage].retry_message + ' (API response issue).';
+                    console.error('Unexpected API response structure for global suggestion:', result);
+                }
+            } catch (error) {
+                console.error('Error fetching global dish suggestion:', error);
+                // More specific error message for network/fetch errors
+                suggestionDiv.textContent = translations[currentLanguage].retry_message + ' (Network error).';
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Function to render a single category page
+        function renderCategoryPage(category, index) {
+            const categoryPage = document.createElement('div');
+            categoryPage.className = 'category-page';
+            categoryPage.id = `category-page-${index}`; // Unique ID for each page
+
+            const currentCategoryKey = categoryKeys[index]; // Get the category key using the index
+
+            // Category title
+            const categoryTitle = document.createElement('h2');
+            categoryTitle.className = 'menu-category-title';
+            categoryTitle.textContent = `${category.category_arabic} | ${category.category_english}`;
+            categoryPage.appendChild(categoryTitle);
+
+            // Category notes (if any)
+            if (category.notes) {
+                const notes = document.createElement('p');
+                notes.className = 'category-notes';
+                notes.textContent = category.notes;
+                categoryPage.appendChild(notes);
+            }
+
+            // Create a grid for items within this category page
+            const itemsGrid = document.createElement('div');
+            itemsGrid.className = 'menu-items-grid';
+
+            // List items
+            category.items.forEach((item, itemIndex) => { // Added itemIndex for unique IDs
+                const menuItemCard = document.createElement('div');
+                menuItemCard.className = 'menu-item-card';
+
+                const itemHeader = document.createElement('div');
+                itemHeader.className = 'item-header';
+
+                const itemContent = document.createElement('div');
+                itemContent.className = 'item-content';
+
+                const itemNameArabic = document.createElement('span');
+                itemNameArabic.className = 'item-name-arabic';
+                itemNameArabic.textContent = item.arabic_name;
+                itemContent.appendChild(itemNameArabic);
+
+                const itemNameEnglish = document.createElement('span');
+                itemNameEnglish.className = 'item-name-english';
+                itemNameEnglish.textContent = item.english_name;
+                itemContent.appendChild(itemNameEnglish);
+
+                itemHeader.appendChild(itemContent);
+
+                // Price display logic
+                if (currentCategoryKey === "grills_al_nile" && typeof item.price_aed === 'string' && item.price_aed.includes('/')) {
+                    const prices = item.price_aed.split('/').map(p => p.trim());
+                    const singlePrice = parseFloat(prices[0]);
+                    const kiloPrice = parseFloat(prices[1]);
+                    const halfKiloPrice = (kiloPrice / 2).toFixed(2); // Calculate half kilo price
+
+                    const grillPricesDiv = document.createElement('div');
+                    grillPricesDiv.className = 'grill-prices';
+                    grillPricesDiv.innerHTML = `
+                        <span class="price-label">${currentLanguage === 'ar' ? 'طلب:' : 'Portion:'}</span> <span class="price-value">AED ${singlePrice}</span><br>
+                        <span class="price-label">${currentLanguage === 'ar' ? 'نص كيلو:' : 'Half Kilo:'}</span> <span class="price-value">AED ${halfKiloPrice}</span><br>
+                        <span class="price-label">${currentLanguage === 'ar' ? 'كيلو:' : 'Kilo:'}</span> <span class="price-value">AED ${kiloPrice}</span>
+                    `;
+                    itemHeader.appendChild(grillPricesDiv);
+                } else {
+                    const itemPrice = document.createElement('span');
+                    itemPrice.className = 'item-price';
+                    itemPrice.textContent = `AED ${item.price_aed}`;
+                    itemHeader.appendChild(itemPrice);
+                }
+
+                menuItemCard.appendChild(itemHeader);
+
+                // Action buttons container
+                const actionButtonsContainer = document.createElement('div');
+                actionButtonsContainer.className = 'action-buttons-container';
+                menuItemCard.appendChild(actionButtonsContainer);
+
+                // Dish description button
+                const descriptionButton = document.createElement('button');
+                descriptionButton.className = 'description-button';
+                descriptionButton.innerHTML = `✨ <span data-lang-key="description_button">${translations[currentLanguage].description_button}</span>`;
+                actionButtonsContainer.appendChild(descriptionButton);
+
+                // Pairing suggestion button
+                const pairingButton = document.createElement('button');
+                pairingButton.className = 'pairing-button';
+                pairingButton.innerHTML = `✨ <span data-lang-key="pairing_button">${translations[currentLanguage].pairing_button}</span>`;
+                actionButtonsContainer.appendChild(pairingButton);
+
+                // Nutritional Info button
+                const nutritionalButton = document.createElement('button');
+                nutritionalButton.className = 'nutritional-button';
+                nutritionalButton.innerHTML = `✨ <span data-lang-key="nutritional_button">${translations[currentLanguage].nutritional_button}</span>`;
+                actionButtonsContainer.appendChild(nutritionalButton);
+
+
+                // Dish description container
+                const dishDescriptionDiv = document.createElement('div');
+                dishDescriptionDiv.className = 'llm-info-content';
+                dishDescriptionDiv.id = `desc-${index}-${itemIndex}`; // Unique ID
+                menuItemCard.appendChild(dishDescriptionDiv);
+
+                // Pairing suggestion container
+                const pairingSuggestionDiv = document.createElement('div');
+                pairingSuggestionDiv.className = 'llm-info-content';
+                pairingSuggestionDiv.id = `pair-${index}-${itemIndex}`; // Unique ID
+                menuItemCard.appendChild(pairingSuggestionDiv);
+
+                // Nutritional Info container
+                const nutritionalInfoDiv = document.createElement('div');
+                nutritionalInfoDiv.className = 'llm-info-content';
+                nutritionalInfoDiv.id = `nutri-${index}-${itemIndex}`; // Unique ID
+                menuItemCard.appendChild(nutritionalInfoDiv);
+
+
+                // Event listener for the description button
+                descriptionButton.addEventListener('click', () => {
+                    const targetDiv = document.getElementById(`desc-${index}-${itemIndex}`);
+                    if (targetDiv && targetDiv.textContent && targetDiv.textContent.trim() !== '' && !targetDiv.textContent.includes('جاري تحميل') && !targetDiv.textContent.includes('Loading')) {
+                        hideAllLLMContent(menuItemCard); // Hide others
+                        targetDiv.classList.toggle('active'); // Toggle this one
+                    } else if (targetDiv) {
+                        getDishDescription(item.arabic_name, item.english_name, targetDiv, descriptionButton, menuItemCard);
+                    }
+                });
+
+                // Event listener for the pairing button
+                pairingButton.addEventListener('click', () => {
+                    const targetDiv = document.getElementById(`pair-${index}-${itemIndex}`);
+                    if (targetDiv && targetDiv.textContent && targetDiv.textContent.trim() !== '' && !targetDiv.textContent.includes('جاري البحث') && !targetDiv.textContent.includes('Searching')) {
+                        hideAllLLMContent(menuItemCard); // Hide others
+                        targetDiv.classList.toggle('active'); // Toggle this one
+                    } else if (targetDiv) {
+                        getPairingSuggestion(item.arabic_name, item.english_name, targetDiv, pairingButton, menuItemCard);
+                    }
+                });
+
+                // Event listener for the nutritional button
+                nutritionalButton.addEventListener('click', () => {
+                    const targetDiv = document.getElementById(`nutri-${index}-${itemIndex}`);
+                    if (targetDiv && targetDiv.textContent && targetDiv.textContent.trim() !== '' && !targetDiv.textContent.includes('جاري حساب') && !targetDiv.textContent.includes('Calculating')) {
+                        hideAllLLMContent(menuItemCard); // Hide others
+                        targetDiv.classList.toggle('active'); // Toggle this one
+                    } else if (targetDiv) {
+                        getNutritionalInfo(item.arabic_name, item.english_name, targetDiv, nutritionalButton, menuItemCard);
+                    }
+                });
+
+                itemsGrid.appendChild(menuItemCard); // Add menu item to the sub-grid
+            });
+            categoryPage.appendChild(itemsGrid); // Add the items grid to the category page
+
+            menuBookContainer.appendChild(categoryPage); // Add the category page to the book container
+        }
+
+        // Render all categories initially (hidden)
+        // This is now handled by updateLanguageUI() on initial load and language change
+
+        // Function to show a specific category page
+        function showCategory(index) {
+            const allPages = document.querySelectorAll('.category-page');
+            allPages.forEach(page => page.classList.remove('active')); // Hide all
+
+            const activePage = document.getElementById(`category-page-${index}`);
+            if (activePage) {
+                activePage.classList.add('active'); // Show active
+            }
+
+            // Update button states
+            prevButton.disabled = (index === 0);
+            nextButton.disabled = (index === categories.length - 1);
+        }
+
+        // Navigation functions
+        function nextCategory() {
+            if (currentCategoryIndex < categories.length - 1) {
+                currentCategoryIndex++;
+                showCategory(currentCategoryIndex);
+            }
+        }
+
+        function prevCategory() {
+            if (currentCategoryIndex > 0) {
+                currentCategoryIndex--;
+                showCategory(currentCategoryIndex);
+            }
+        }
+
+        // Event listeners for navigation buttons
+        prevButton.addEventListener('click', prevCategory);
+        nextButton.addEventListener('click', nextCategory);
+
+        // Event listener for the global suggest dish button
+        globalSuggestButton.addEventListener('click', () => {
+            getGlobalDishSuggestion(globalSuggestionOutput, globalSuggestButton);
+        });
+
+        // Feedback Modal Logic
+        // These elements are now selected inside the DOMContentLoaded listener
+        // const openFeedbackModalBtn = document.getElementById('openFeedbackModalBtn');
+        // const feedbackModal = document.getElementById('feedbackModal');
+        // const closeFeedbackModalBtn = document.getElementById('closeFeedbackModalBtn');
+        // const feedbackCommentInput = document.getElementById('feedbackComment');
+        // const submitFeedbackBtn = document.getElementById('submitFeedbackBtn');
+        // const feedbackListDiv = document.getElementById('feedbackList');
+        // const noFeedbackMessage = document.getElementById('noFeedbackMessage');
+
+        // openFeedbackModalBtn.addEventListener('click', () => {
+        //     feedbackModal.style.display = 'flex'; // Use flex to center
+        // });
+
+        // closeFeedbackModalBtn.addEventListener('click', () => {
+        //     feedbackModal.style.display = 'none';
+        //     // Clear rating and comment when closing
+        //     document.querySelectorAll('.star-rating input').forEach(radio => radio.checked = false);
+        //     feedbackCommentInput.value = '';
+        // });
+
+        // // Close modal if clicked outside content
+        // window.addEventListener('click', (event) => {
+        //     if (event.target === feedbackModal) {
+        //         feedbackModal.style.display = 'none';
+        //         document.querySelectorAll('.star-rating input').forEach(radio => radio.checked = false);
+        //         feedbackCommentInput.value = '';
+        //     }
+        // });
+
+        // submitFeedbackBtn.addEventListener('click', async () => {
+        //     const rating = document.querySelector('.star-rating input:checked')?.value;
+        //     const comment = feedbackCommentInput.value.trim();
+
+        //     if (!rating) {
+        //         alert(currentLanguage === 'ar' ? 'الرجاء اختيار تقييم بالنجوم.' : 'Please select a star rating.');
+        //         return;
+        //     }
+
+        //     if (db) {
+        //         try {
+        //             await addDoc(collection(db, `artifacts/${appId}/public/data/feedback`), {
+        //                 rating: parseInt(rating),
+        //                 comment: comment,
+        //                 timestamp: serverTimestamp(),
+        //                 userId: userId // Store user ID (anonymous or authenticated)
+        //             });
+        //             alert(translations[currentLanguage].feedback_submitted);
+        //             feedbackModal.style.display = 'none';
+        //             document.querySelectorAll('.star-rating input').forEach(radio => radio.checked = false);
+        //             feedbackCommentInput.value = '';
+        //         } catch (e) {
+        //             console.error("Error adding document: ", e);
+        //             alert(translations[currentLanguage].feedback_error);
+        //         }
+        //     } else {
+        //         alert(currentLanguage === 'ar' ? 'لا يمكن إرسال التقييم: Firebase غير متاح.' : 'Cannot submit feedback: Firebase not available.');
+        //     }
+        // });
+
+        // Function to display feedback
+        function displayFeedback(feedbackDocs) {
+            // Ensure feedbackListDiv is selected before attempting to modify it
+            const currentFeedbackListDiv = document.getElementById('feedbackList');
+            if (!currentFeedbackListDiv) {
+                console.error("feedbackListDiv not found.");
+                return;
+            }
+
+            currentFeedbackListDiv.innerHTML = `<h3 class="text-xl font-semibold mb-4" data-lang-key="customer_reviews">${translations[currentLanguage].customer_reviews}</h3>`;
+            if (feedbackDocs.length === 0) {
+                currentFeedbackListDiv.innerHTML += `<p id="noFeedbackMessage" class="text-gray-400" data-lang-key="no_feedback_yet">${translations[currentLanguage].no_feedback_yet}</p>`;
+                return;
+            }
+
+            feedbackDocs.forEach(doc => {
+                const feedback = doc.data();
+                const feedbackItem = document.createElement('div');
+                feedbackItem.className = 'feedback-item';
+
+                const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
+                const timestamp = feedback.timestamp ? new Date(feedback.timestamp.seconds * 1000).toLocaleString(currentLanguage === 'ar' ? 'ar-EG' : 'en-US') : '';
+
+                feedbackItem.innerHTML = `
+                    <div class="rating text-right">${stars}</div>
+                    <p class="comment">${feedback.comment}</p>
+                    <p class="timestamp">${timestamp}</p>
+                `;
+                currentFeedbackListDiv.appendChild(feedbackItem);
+            });
+        }
+
+        // Setup real-time listener for feedback
+        function setupFeedbackListener() {
+            if (db) {
+                const q = query(collection(db, `artifacts/${appId}/public/data/feedback`));
+                onSnapshot(q, (querySnapshot) => {
+                    const feedback = [];
+                    querySnapshot.forEach((doc) => {
+                        feedback.push(doc);
+                    });
+                    displayFeedback(feedback);
+                }, (error) => {
+                    console.error("Error getting feedback: ", error);
+                    const currentFeedbackListDiv = document.getElementById('feedbackList');
+                    if (currentFeedbackListDiv) {
+                        currentFeedbackListDiv.innerHTML = `<p class="text-red-400">${currentLanguage === 'ar' ? 'حدث خطأ في تحميل التقييمات.' : 'Error loading reviews.'}</p>`;
+                    }
+                });
+            }
+        }
+
+        // Show the first category on load
+        showCategory(currentCategoryIndex);
+    </script>
+</body>
+</html>
